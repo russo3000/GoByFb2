@@ -1,0 +1,208 @@
+<ion-view view-title="" hide-nav-bar="false" >
+
+
+<ion-nav-bar class="bar-positive">
+    <ion-nav-back-button>    
+    </ion-nav-back-button>
+  <ion-nav-buttons side="right">
+    
+    
+    <button class="itemButton button-border-a button button-icon ion-checkmark" ng-click="saveItem(true)" ng-if="newItem"></button>
+    <button class="itemButton button-border-a button button-icon ion-android-share-alt" ng-click="shareItem()" ng-if="!newItem"> </button>         	
+    <button id="choose-img-btn" class="itemButton button button-icon ion-images" ng-click="imageSelection()"> </button>
+    <button class="itemButton button-border-b button button-icon ion-trash-b" ng-click="deleteItem()" ng-if="!newItem"> </button> 
+
+
+  </ion-nav-buttons>
+</ion-nav-bar>
+
+ <div class="bar bar-subheader item-input-inset bar-stable">
+   <div id="editItemName" class="item-input-inset">
+          <label class="item-input-wrapper item-input-wrapper-bkg"> 
+            <i class="icon ion-android-create placeholder-icon"></i>
+            <input type="text" id="itemDataName"  ng-model="itemData.name" placeholder="Item Name" searchKey="TEST">
+          </label>          
+    </div>    
+  </div>
+
+
+   <div id="itemImageSelection">   
+            <div id="itemImageSelectionMenu">
+              <button class="ItemCameraButton button button-icon ion-camera" ng-click="takePhoto()" > Photo</button>
+              <button class="ItemCameraButton button button-icon ion-images" ng-click="showGallery()" > My Gallery</button>
+              <div id="itemImageSelectionClose">
+                <button class="button-icon ion-ios-close-outline" ng-click="cancelImageSelection()" ></button>  
+              </div>
+            </div>
+          </div>
+
+
+
+
+  <div id="my-item" ng-style="{'background-image':'url('+Item.default_image.image_name+')'}">
+
+
+
+
+  <ion-content id="item-content" delegate-handle="example-scroller" elastic-header="example-elastic-header" overflow-scroll="false">
+
+
+
+      <div id="part-1"> 
+          
+
+        <div id="example-elastic-header" >          
+          <div class="add-images" ng-if="Item.images.length == 0">
+            <h1>Add an Image</h1>
+            <button class="ItemCameraButton button button-icon ion-camera" ng-click="takePhoto()" > Photo</button>
+            <button class="ItemCameraButton button button-icon ion-images" ng-click="showGallery()" > My Gallery</button>
+          </div>
+          <div id="default-image" class="thumbnail_big" ng-if="Item.images.length > 0" style="width:414px" ng-click="goToSlide()">
+            <!--<img ng-src="{{Item.default_image.image_name}}" class="portrait" style="width:414px" ng-click="goToSlide()">-->
+          </div>
+          <div class="wrapperImageSelection"  id="wrapperImageSelection">
+            <div id="scrollerImageSelection" style="width:{{(Item.images.length +1)  * 140}}px">
+              <ul>
+                <li ng-repeat="image in Item.images track by $index " id="li_image_{{$index}}" >
+                  <div class="thumbnail" id="image_wrapper_{{$index}}">
+                    <img ng-src="{{image.image_name}}" on-hold="onHold('{{$index}}')" id="image_{{$index}}" class="portrait imageSelection" ng-click="makeDefault('image_{{$index}}','{{$index}}')" onerror="ImgError(this)" img-type="{{image.image_type}}">      
+                    <div id="itemDelete_{{$index}}" class="hidden itemDelete">
+                      <button class="button-icon ion-trash-b" ng-click="deleteImage('{{$index}}')" ></button>
+                    </div>           
+                    <div id="itemCancelDelete_{{$index}}" class="hidden itemCancelDelete" >
+                      <button class="button-icon ion-ios-close-outline" ng-click="cancelImageDeletion('{{$index}}')" ></button>
+                    </div>           
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <ion-list show-delete="data.showDelete" class="list" id="itemAttributes">
+          <div class="itemHeader">                          
+              <button id="button_main" class="itemButton button button-icon ion-earth selected" ng-click="showItemTab('main')" > </button>   
+              <button id="button_phone" class="itemButton button button-icon ion-ios-telephone" ng-click="showItemTab('phone')" > </button>
+              <button ng-if="Item.opening_hours" id="button_time" class="itemButton button button-icon ion-ios-clock" ng-click="showItemTab('time')" > </button>      
+          </div>
+          <div id="main">
+            <ion-item class="item item-text-wrap item-icon-left item-icon-right item-remove-animate">          
+              <i class="icon ion-ios-bookmarks-outline"></i>
+                <div class="item-text" ng-click="editItems('notes')">
+                  {{Item.notes}}
+                  <i class="temporary" ng-if="!Item.notes">My Notes</i>    
+                </div>
+            </ion-item>
+            <ion-item class="item item-text-wrap item-icon-left item-icon-right item-remove-animate">
+              <i class="icon ion-ios-location-outline"></i>
+                <div class="item-text-address" ng-click="goToMap()">
+                  {{Item.formatted_address}}
+                  <i class="temporary-address" ng-if="!Item.formatted_address">Address</i>
+                  <div class="right-slide"><i class="ion-icon calm ion-arrow-left-a"></i> <i class="ion-icon calm ion-edit"></i></div>
+                </div>
+              <ion-option-button class="button-positive ion-edit option-border-a" ng-click="editItems('formatted_address')"></ion-option-button>
+            </ion-item>
+          </div>
+          <div id="phone" class="hidden">
+            <ion-item class="item item-text-wrap item-icon-left item-icon-right item-remove-animate">          
+              <i class="icon ion-ios-telephone-outline"></i>
+                <div class="item-text" ng-click="editItems('international_phone_number')">
+                  {{Item.international_phone_number}}
+                  <i class="temporary" ng-if="!Item.international_phone_number">Phone Number</i>
+                  
+                </div>
+            </ion-item>
+            <ion-item class="item item-text-wrap item-icon-left item-icon-right item-remove-animate">          
+              <i class="icon ion-link"></i>
+                <div class="item-text" ng-click="editItems('website')">
+                  {{Item.website}}
+                  <i class="temporary" ng-if="!Item.website">Website</i>
+                </div>
+            </ion-item>          
+          </div>
+          <div id="time" class="hidden">
+            <a class="item item-icon-left" href="#" ng-if="Item.opening_hours">
+              <i class="icon ion-clock"></i>
+              <div ng-if="Item.opening_hours.open_now" style="color:green">Open Now</div>
+              <div ng-if="!Item.opening_hours.open_now" style="color:red">Closed Now</div>
+            </a>
+            <a ng-repeat="opening_hour in Item.opening_hours.weekday_text track by $index" class="item item-icon-right" href="#">         
+                <div>{{opening_hour}}</div>
+                <i class="icon ion-ios-clock-outline"></i>
+            </a>  
+          </div>   
+        </ion-list>
+
+        <div class="cat-spacer">&nbsp;</div>
+        
+          <ion-toggle ng-model="Item.is_public" ng-checked="Item.is_public" toggle-class="toggle-balanced"  ng-change="makePrivate()" style="height:70px">
+                     Visibility: <b><span ng-if="Item.is_public"  style="color:#33cd5f;">Public</span><span ng-if="!Item.is_public" style="color:#ef473a;">Private</span></b> 
+                     <span id="can-see" ng-if="Item.is_public">(My Friends <b style="color:#33cd5f;">can</b> see this Item)</span>
+                     <span id="can-not-see" ng-if="!Item.is_public">(My Friends <b style="color:#ef473a;">can't</b> see this Item)</span>
+            </ion-toggle>
+        
+
+
+        <ion-item class="ion-text-wrap" id="item-categories" style="display:block;height:{{(user.categories.length * 54) + 106}}px;">
+          <div class="cat-spacer">&nbsp;</div>
+      			<div class="max-width categories-header">	
+      				<div class="button-icon ion-pricetags left"> Categories: </div>					
+      				<div class="button-icon ion-arrow-move right" ng-click="data.showDelete = false; data.showReorder = !data.showReorder; toggleCategories();"></div>
+      				<div id="category_btn" class="button-icon ion-plus-circled right" ng-click="addNewCategory()" ></div>
+      				<div id="categoryRequired" class="left">
+      				* Please select atleast one category
+      				</div>
+      			</div>				
+      			<ion-list show-delete="data.showDelete" show-reorder="data.showReorder" class="max-width left">			
+      		    <ion-item ng-repeat="category in user.categories track by $index" item="category" class="item-remove-animate">					
+      			     <label class="checkbox max-width">
+      			       <input type="checkbox" name="category" categoryid="{{category.id}}" class="category-checkbox" ng-click="clickItem(category);" ng-change="updateItemSelectedCategoryValues()" ng-model="category.checked"> 
+      				    {{ category.name }}
+      				    <div class="right"><i class="ion-icon calm ion-arrow-left-a"></i> <i class="ion-icon calm ion-edit"></i></div>
+      			     </label>
+      			     <ion-option-button class="button-positive ion-edit option-border-a" ng-click="editCategory(category);"></ion-option-button>
+      			     <ion-option-button class="button-assertive ion-trash-b option-border-b" ng-click="deleteCategory(category);"></ion-option-button>
+      			     <ion-reorder-button class="ion-navicon" on-reorder="reorderCategory(category, $fromIndex, $toIndex)"></ion-reorder-button>
+      		    </ion-item>
+      			</ion-list>      
+         
+      	 </ion-item>
+            <div class="cat-spacer">&nbsp;</div>
+      </div>
+  
+
+    <script language="JavaScript" type="text/javascript">
+    function ImgError(source)
+    {
+      var scope = angular.element($("#my-item")).scope();
+
+      var found = false;
+      for(var i = 0; i< scope.Item.images.length; i++)
+      {
+        if(scope.Item.images[i].image_name == source.src)
+        {
+          found = true;
+          break;
+        }
+      }
+
+      if(found)
+      {
+        scope.Item.images.splice(i, 1);
+        scope.$apply();
+
+        //console.log(scope.Item);
+      }
+      
+      return true;
+    }
+    </script>
+  		
+  </ion-content>
+  </div>
+</ion-view>
+
+
+
+
+

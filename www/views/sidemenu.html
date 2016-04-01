@@ -1,0 +1,42 @@
+<ion-side-menus enable-menu-with-back-views="false">
+<ion-side-menu-content edge-drag-threshold="true" drag-content="false">     
+    <ion-nav-view name="menuContent"></ion-nav-view>
+  </ion-side-menu-content>
+
+  <ion-side-menu side="left">
+    <ion-content>
+      <ion-list>
+        <ion-item class="profile">
+          <div class="user" ng-style="{'background-image':'url('+user.picture+')'}" ng-click="goHome()" menu-close></div>
+        </ion-item>
+
+
+        <ion-item menu-close class="item item-text-wrap item-icon-left" href="#/app/home">
+          <i class="icon ion-ios-home"></i>
+          <div class="item-text-side-menu" >Home </div>
+        </ion-item>
+
+        <ion-item menu-close class="item item-text-wrap item-icon-left" href="#/app/friends">
+          <i class="icon ion-ios-people"></i>
+          <div class="item-text-side-menu" >My Friend's Lists <span class="badge badge-assertive" ng-if="notifications >0">{{notifications}}</span></div>
+        </ion-item>
+        <!--
+        <ion-item menu-close  class="item item-text-wrap item-icon-left" href="#">
+          <i class="icon ion-paper-airplane"></i>
+          <div class="item-text-side-menu" >Invite Friends</div>
+        </ion-item>
+        <ion-item menu-close  class="item item-text-wrap item-icon-left" href="#/app/friends">
+          <i class="icon ion-ios-gear"></i>
+          <div class="item-text-side-menu">Settings</div>
+        </ion-item>
+      -->
+
+
+
+      </ion-list>
+    </ion-content>
+      <ion-footer-bar class="bar-assertive">
+        <ion-item menu-close  class="logout"  ng-click="logOut()">Logout</ion-item>
+      </ion-footer-bar>
+  </ion-side-menu>
+</ion-side-menus>

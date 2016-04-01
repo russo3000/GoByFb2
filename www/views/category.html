@@ -1,0 +1,52 @@
+<ion-view view-title="" hide-nav-bar="false" class="modal image-modal transparent" >
+  <div id="category-modal">
+    <ion-nav-bar class="bar-positive">
+      <ion-nav-buttons side="left">
+      </ion-nav-buttons>
+        
+      
+      <ion-nav-buttons side="right">
+        <button class="itemButton button-border-b button button-icon ion-close-circled" ng-click="closeModal()" > </button>  
+      </ion-nav-buttons>
+
+    </ion-nav-bar>
+
+    <div id="editCategoryName" class="item-input-inset ">
+      <label class="item-input-wrapper category-name" > 
+        <i class="icon ion-android-create placeholder-icon"></i>
+        <input type="text" id="categoryNameName" ng-model="currentCategory.name" placeholder="Item Name">
+      </label>
+    </div>
+
+
+  <div class="bar bar-subheader bar-stable">
+    <button class="button button-icon ion-plus-circled" ng-click="addNewItem('{{currentCategory.id}}')" > Add a new item to this category</button>        
+  </div>
+
+    <ion-content class="has-subheader">   
+        
+      <div ng-if="currentCategory.items.length > 0" class="category-items">
+        <h3 class="nowrap reorder"> Reorder Items <i class="ion-navicon"></i></h3>
+        <ion-list show-delete="data.showDelete" show-reorder="shouldShowReorder" class="max-width left">
+          <ion-item ng-repeat="item in currentCategory.items | orderBy:'-' track by $index" item="item" class="item item-text-wrap item-thumbnail-left item-remove-animate">
+            <div class="thumbnail category-tmb" >  
+              <img ng-src="{{item.default_image.image_name}}" alt="{{ item.name }} Photo"  onerror="ImgError(this)" class="portrait">
+            </div>
+            <div class="category-item-name" >
+              <p>{{item.name | limitTo: 60}} {{item.name.length > 60 ? '&hellip;' : ''}}</p>          
+            </div>       
+            <ion-reorder-button class="ion-navicon" on-reorder="reorderItems(item, $fromIndex, $toIndex)"></ion-reorder-button>
+          </ion-item>
+        </ion-list>       
+      </div>
+        <script language="JavaScript" type="text/javascript">
+        function ImgError(source)
+        {
+          $("#li_"+source.id).remove();
+          $("#slides_to_remove").val($("#slides_to_remove").val() +',' + "li_slide_"+source.id);
+          return true;
+        }
+        </script>      
+    </ion-content>
+  </div>
+</ion-view>

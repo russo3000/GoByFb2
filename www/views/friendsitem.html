@@ -1,0 +1,140 @@
+<ion-view view-title="" hide-nav-bar="false" >
+
+
+<ion-nav-bar class="bar-light">
+    <ion-nav-back-button>
+    </ion-nav-back-button>
+  <ion-nav-buttons side="right">
+    <button class="itemButton button-border-a button button-icon ion-android-share-alt" ng-click="shareItem()" ng-if="!newItem"> </button>         	
+    </ion-nav-buttons>
+</ion-nav-bar>
+
+ <div id="editFriendItemName" class="friend-item-name fixedElement">
+            {{Item.name}}
+          </label>
+  </div>
+
+  <div id="my-item">
+
+
+ 
+
+  <ion-content id="item-content" delegate-handle="example-scroller" elastic-header="example-elastic-header" overflow-scroll="false">
+
+      <div id="part-2"> 
+      <div id="example-elastic-header" >
+        <div id="friend-slider">
+        <ion-slide-box on-slide-changed="slideChanged(index)" show-pager="true" does-continue="true" auto-play="true">
+              <ion-slide ng-repeat="image in Item.images track by $index " id="li_slide_image_{{$index}}">
+              <div class="friend-slider-item" ng-style="{'background-image':'url('+image.image_name+')'}" ng-click="goToSlide({{$index}})">
+               </div>   
+              </ion-slide>
+            </ion-slide-box>
+        </div>    
+      </div>    
+
+        <ion-list class="list" id="itemAttributes">
+          <div class="itemHeader">                          
+              <button id="button_main" class="itemButton button button-icon ion-earth selected" ng-click="showItemTab('main')" > </button>   
+              <button id="button_phone" class="itemButton button button-icon ion-ios-telephone" ng-click="showItemTab('phone')" > </button>
+              <button ng-if="Item.opening_hours" id="button_time" class="itemButton button button-icon ion-ios-clock" ng-click="showItemTab('time')" > </button>      
+          </div>
+          <div id="main">
+            <ion-item class="item item-text-wrap item-icon-left item-icon-right item-remove-animate">          
+              <i class="icon ion-ios-bookmarks-outline"></i>
+                <div class="item-text">
+                  {{Item.notes}}
+                  <i class="temporary" ng-if="!Item.notes">{{currentFriend.name}}'s Notes</i>    
+                </div>
+            </ion-item>
+            <ion-item class="item item-text-wrap item-icon-left item-icon-right item-remove-animate">
+              <i class="icon ion-ios-location-outline"></i>
+                <div ng-click="goToMap()">
+                  {{Item.formatted_address}}
+                  <i class="temporary-address" ng-if="!Item.formatted_address">Address</i>                  
+                </div>
+            </ion-item>
+          </div>
+          <div id="phone" class="hidden">
+            <ion-item class="item item-text-wrap item-icon-left item-icon-right item-remove-animate">          
+              <i class="icon ion-ios-telephone-outline"></i>
+                <div class="item-text">
+                  {{Item.international_phone_number}}
+                  <i class="temporary" ng-if="!Item.international_phone_number">Phone Number</i>                  
+                </div>
+            </ion-item>
+            <ion-item class="item item-text-wrap item-icon-left item-icon-right item-remove-animate">          
+              <i class="icon ion-link"></i>
+                <div class="item-text">
+                  {{Item.website}}
+                  <i class="temporary" ng-if="!Item.website">Website</i>
+                </div>
+            </ion-item>          
+          </div>
+          <div id="time" class="hidden">
+            <a class="item item-icon-left" href="#" ng-if="Item.opening_hours">
+              <i class="icon ion-clock"></i>
+              <div ng-if="Item.opening_hours.open_now" style="color:green">Open Now</div>
+              <div ng-if="!Item.opening_hours.open_now" style="color:red">Closed Now</div>
+            </a>
+            <a ng-repeat="opening_hour in Item.opening_hours.weekday_text track by $index" class="item item-icon-right" href="#">         
+                <div>{{opening_hour}}</div>
+                <i class="icon ion-ios-clock-outline"></i>
+            </a>  
+          </div>   
+        </ion-list>
+
+   
+
+
+        <ion-item class="ion-text-wrap" id="item-categories" style="display:block;">
+          <div class="cat-spacer">&nbsp;</div>
+          <div class="max-width categories-header"> 
+            <div class="button-icon ion-pricetags left max-width"> 
+              Categories: 
+              <div ng-repeat="category in currentFriend.categories track by $index" item="category" >         
+                <div class="cb-img"> <img src="img/checked.png" height="30px"  ng-if="category.checked"> </div>
+                <div class="cb-txt"  ng-if="category.checked">{{ category.name }}</div>
+              </div>
+              </div>         
+          </div>        
+        </ion-item>
+
+      </div>
+  
+
+    <script language="JavaScript" type="text/javascript">
+    function ImgError(source)
+    {
+      var scope = angular.element($("#my-item")).scope();
+
+      var found = false;
+      for(var i = 0; i< scope.Item.images.length; i++)
+      {
+        if(scope.Item.images[i].image_name == source.src)
+        {
+          found = true;
+          break;
+        }
+      }
+
+      if(found)
+      {
+        scope.Item.images.splice(i, 1);
+        scope.$apply();
+
+        //console.log(scope.Item);
+      }
+      
+      return true;
+    }
+    </script>
+  		
+  </ion-content>
+  </div>
+</ion-view>
+
+
+
+
+
