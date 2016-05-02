@@ -716,6 +716,20 @@ float: left;
  margin-bottom: 40px;
 }
 
+.my-category-item
+{
+  width:85%;
+  position: relative;
+  z-index: 100;
+   opacity: 0;
+    filter: alpha(opacity=0); /* For IE8 and earlier */
+}
+
+.category-ghost
+{
+  position: relative;
+  left: -105px;
+}
 
 #categoryDataName
 {

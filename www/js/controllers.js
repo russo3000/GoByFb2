@@ -5,20 +5,10 @@ angular.module('controllers', [])
   var max = 41;
   var min = 0;
   $scope.random = Math.floor(Math.random()*(max-min+1)+min);
-
-  
-  if(ConnectivityMonitor.checkConnection())
-  {
-    $rootScope.connectionStatus = "connected";  
-  }
-  else
-  {
-    $rootScope.connectionStatus = "not-connected";
-  }
-
   $rootScope.notifications = 0;
   $rootScope.newItemFromHome = null;
   $rootScope.show_friends = false;
+
 
   $rootScope.isMobile = function()
   {          
@@ -569,6 +559,15 @@ $rootScope.GotFriend = function(connected, friend)
   
   };
 
+  if(ConnectivityMonitor.checkConnection())
+  {
+    $rootScope.connectionStatus = "connected";      
+  }
+  else
+  {
+    $rootScope.connectionStatus = "not-connected";
+  }
+
   ConnectivityMonitor.startWatching($rootScope.showConnectionStatus);
   $rootScope.showConnectionStatus($rootScope.connectionStatus);
 })
@@ -840,7 +839,8 @@ console.log($rootScope.user);
   $scope.goToItem = function(itemId)
   {
     console.log(itemId);
-    //<a href="#/app/item/{{item.id}}">
+    window.location = "#/app/item/"+itemId;
+    
   }
 
   $scope.reorderItems = function(item, fromIndex, toIndex) 
@@ -857,6 +857,9 @@ console.log($rootScope.user);
 
     //set it back as it was
     $scope.currentCategory.items.reverse();
+
+    $rootScope.showToast("Saving");
+    DbService.Store($rootScope.user, null);
   }
 
   $ionicModal.fromTemplateUrl('views/category.html', 

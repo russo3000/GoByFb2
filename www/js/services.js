@@ -483,17 +483,28 @@ angular.module('services', [])
 
   function checkConnection()
   {
-    //console.log(navigator);
-    //console.log(navigator.connection);
-    //console.log(navigator.connection.type);
-
-    if(navigator && (typeof navigator.connection == "undefined" || navigator.connection.type === 'none') )
+    
+    if($rootScope.isMobile())
     {
-      return false;
+      if($cordovaNetwork.isOnline())
+      {
+        return true;  
+      }
+      else
+      {
+        return false;
+      }
     }
     else
-    {
-      return true;  
+    {  
+      if(navigator && navigator.onLine)
+      {
+        return true;  
+      }
+      else
+      {
+        return false;
+      }
     }
   };
 
