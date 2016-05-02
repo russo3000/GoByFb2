@@ -510,20 +510,20 @@ angular.module('services', [])
 
   function startWatching(callback)
   {
-    console.log("in start watching: " + $rootScope.connectionStatus);
+    //console.log("in start watching: " + $rootScope.connectionStatus);
 
       if($rootScope.isMobile())
       {
         $rootScope.$on('$cordovaNetwork:online', function(event, networkState)
         {            
-          console.log("went online");
+         // console.log("went online");
           $rootScope.connectionStatus = "connected";
           callback($rootScope.connectionStatus);
         });
 
         $rootScope.$on('$cordovaNetwork:offline', function(event, networkState)
         {
-          console.log("went offline");
+         // console.log("went offline");
           $rootScope.connectionStatus = "not-connected";
           callback($rootScope.connectionStatus);
         });
@@ -532,14 +532,14 @@ angular.module('services', [])
       {
         window.addEventListener("online", function(e) 
         {
-          console.log("went online");
+        //  console.log("went online");
           $rootScope.connectionStatus = "connected";
           callback($rootScope.connectionStatus);
         }, false);    
 
         window.addEventListener("offline", function(e) 
         {
-          console.log("went offline");
+        //  console.log("went offline");
           $rootScope.connectionStatus = "not-connected";
           callback($rootScope.connectionStatus);;
         }, false);  

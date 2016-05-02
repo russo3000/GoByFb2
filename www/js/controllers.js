@@ -330,7 +330,7 @@ $rootScope.isFriendsCategoryPublic = function(friends_category)
 
 $rootScope.GotFriend = function(connected, friend)
 {
-  console.log("rootScope.GotFriend");
+  //console.log("rootScope.GotFriend");
 
   if(connected)
   {
@@ -482,7 +482,7 @@ $rootScope.GotFriend = function(connected, friend)
   {
     if(ConnectivityMonitor.checkConnection())
     {
-      console.log("Starting FB Login");
+      //console.log("Starting FB Login");
       $rootScope.showToast('Logging in...');
 
       //$rootScope.connectionStatus = "not-connected";
@@ -509,8 +509,8 @@ $rootScope.GotFriend = function(connected, friend)
       } 
       else 
       {        
-        console.log("Web Browser");
-        console.log($rootScope.connectionStatus);
+       // console.log("Web Browser");
+       // console.log($rootScope.connectionStatus);
 
         if(typeof FB != "undefined" && $rootScope.connectionStatus != "not-connected")
         {          
@@ -637,7 +637,7 @@ $rootScope.GotFriend = function(connected, friend)
 
 .controller('HomeCtrl', function($ionicPlatform, $rootScope, $scope, UserService, DbService, $state, $filter, $ionicLoading, $ionicPopup, $ionicScrollDelegate, $ionicListDelegate, $cordovaToast, $timeout, $ionicModal){
 
-  console.log("in Home");
+  //console.log("in Home");
 
 	$rootScope.user = UserService.getUser();
 
@@ -650,8 +650,6 @@ $rootScope.GotFriend = function(connected, friend)
   {
       $rootScope.user.categories[i].checked = false;
   }
-
-console.log($rootScope.user);
 
    $scope.showHomeTab = function(tabId)
   {
@@ -829,10 +827,16 @@ console.log($rootScope.user);
         $rootScope.showToast("Saving");
 
         DbService.Store($rootScope.user, null);
+        
+        $ionicListDelegate.closeOptionButtons();
+        $scope.closeModal();
+      }
+      else
+      {
+
       }
 
-      $ionicListDelegate.closeOptionButtons();
-      $scope.closeModal();
+      
     });
   }
   
@@ -900,18 +904,20 @@ console.log($rootScope.user);
   $scope.$on('modal.shown', function() {      
     //console.log('Modal is shown!');
     $("#editCategoryName").hide();
-      setTimeout(function() { $("#editCategoryName").show(); console.log("show")}, 500);    
+      setTimeout(function() { $("#editCategoryName").show();}, 500);    
   });
 
-  $scope.addNewItem = function(myCategoryId)
-  {
-    
+  $scope.addNewItem = function(myId)
+  {    
+    var myCategoryId = $("#"+myId).attr("current-category-id");
+
     //clear the array
     $rootScope.checkedCheckboxes = [];
 
     if(typeof myCategoryId != "undefined")
       $rootScope.checkedCheckboxes.push(myCategoryId);
 
+//console.log($rootScope.checkedCheckboxes);
     $state.go('app.item_new');
   }
 
@@ -1119,11 +1125,8 @@ console.log($rootScope.user);
 
     });
   }
-    // end for scrolling
-    
-    setTimeout(function() { $rootScope.showConnectionStatus($rootScope.connectionStatus);}, 100);    
-    
-
+    // end for scrolling    
+    //setTimeout(function() { $rootScope.showConnectionStatus($rootScope.connectionStatus);}, 300);    
 })
 
 .controller('ItemCtrl', function($rootScope, $scope, $timeout, UserService, DbService, $state, $stateParams, $ionicLoading, $ionicModal, $ionicSlideBoxDelegate, $ionicPopup, $ionicListDelegate, $ionicScrollDelegate, $cordovaCamera, $cordovaFile, ConnectivityMonitor, $cordovaSocialSharing)
@@ -2163,7 +2166,7 @@ $scope.shareLocalImage = function(base64Image)
           }          
         }
 
-        console.log("Name: "+$scope.Item.name);
+       // console.log("Name: "+$scope.Item.name);
 
         if($scope.Item.name == "")
         {
@@ -2255,8 +2258,7 @@ $scope.shareLocalImage = function(base64Image)
       });
       // end for scrolling
 
-      setTimeout(function() { $rootScope.showConnectionStatus($rootScope.connectionStatus);}, 1000);    
-
+      //setTimeout(function() { $rootScope.showConnectionStatus($rootScope.connectionStatus);}, 1000);    
 })
 
 .controller('FriendsCtrl', function($rootScope, $scope, DbService, UserService, $state, $ionicLoading){

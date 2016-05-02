@@ -109,7 +109,7 @@
                       </div>
                     </li>
                     <li>
-                      <div class="photo"><button class="button button-icon ion-plus-circled" ng-click="addNewItem('{{category.id}}')" > Add a new item to this category</button>
+                      <div class="photo"><button class="button button-icon ion-plus-circled" id="current_category_{{category.id}}" current-category-id="{{category.id}}" ng-click="addNewItem('current_category_{{category.id}}')"  > Add a new item to this category</button>
                       </div>
                     </li>                    
                   </ul>

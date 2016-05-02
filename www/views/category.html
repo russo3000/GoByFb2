@@ -21,7 +21,7 @@
 
 
   <div class="bar bar-subheader bar-stable">
-    <button class="button button-icon ion-plus-circled" ng-click="addNewItem('{{currentCategory.id}}')" > Add a new item to this category</button>       
+    <button class="button button-icon ion-plus-circled" id="current_category" current-category-id="{{currentCategory.id}}" ng-click="addNewItem('current_category')" >Add a new item to this category</button>       
   </div>
 
     <ion-content class="has-subheader">       
@@ -42,10 +42,8 @@
           </ion-item>
         </ion-list>               
       </div>
-
-            <div ng-if="currentCategory.items.length > 0" class="category-items">
-        <div id="reorder" class="nowrap"><i class="ion-navicon"></i> Reorder</div>
-
+<button class="button button-block assertive button-icon ion-trash-b" ng-click="deleteCategory(currentCategory);" > Delete this category</button>
+      <div ng-if="currentCategory.items.length > 0" class="category-items">      
         <ion-list  class="max-width left">
           <ion-item ng-repeat="item in currentCategory.items | orderBy:'-' track by $index" item="item" class="item item-text-wrap item-thumbnail-left item-remove-animate my-category-item" ng-style="{'top': (currentCategory.items.length * -107)+'px'}">
             <div class="thumbnail category-tmb category-ghost" > 
@@ -56,22 +54,7 @@
         </ion-list>               
       </div>
 
-<!--
-<div ng-if="currentCategory.items.length > 0" class="category-items">
-        
-
-        <ion-list>
-          <ion-item ng-repeat="item in currentCategory.items | orderBy:'-' track by $index" item="item" class="my-category-item" >
-
-            <div onclick="javascript:alert('go to Item')"> 
-            {{$index}}
-            </div>
-            
-          </ion-item>
-        </ion-list>               
-      </div>
--->
-      <button class="button button-block assertive button-icon ion-trash-b" ng-click="deleteCategory(currentCategory);" > Delete this category</button>
+      
     
       
 
