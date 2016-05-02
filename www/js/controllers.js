@@ -6,9 +6,19 @@ angular.module('controllers', [])
   var min = 0;
   $scope.random = Math.floor(Math.random()*(max-min+1)+min);
 
-  $rootScope.connectionStatus = "connected";
+  
+  if(ConnectivityMonitor.checkConnection())
+  {
+    $rootScope.connectionStatus = "connected";  
+  }
+  else
+  {
+    $rootScope.connectionStatus = "not-connected";
+  }
+
   $rootScope.notifications = 0;
   $rootScope.newItemFromHome = null;
+  $rootScope.show_friends = false;
 
   $rootScope.isMobile = function()
   {          
@@ -302,16 +312,48 @@ $rootScope.searchFromFlicker3 = function(searchValuePrimary, place, images_from_
 
  };
 
+$rootScope.isFriendsCategoryPublic = function(friends_category)
+{
+  //console.log(friends_category);
+         
+  var private_items_count = 0;
+  friends_category.is_public = true;
+  for(var j=0; j< friends_category.items.length; j++)
+  {
+    if(friends_category.items[j].is_public == false)
+    {
+    //  console.log(friends_category.items[j].is_public);
+      private_items_count++;
+    }
+  }
+
+//console.log(friends_category.items.length+" == "+ private_items_count);
+
+  if(friends_category.items.length == private_items_count)
+  {
+    friends_category.is_public = false;      
+  }
+  
+  //console.log(friends_category.is_public);
+  return friends_category.is_public;
+}
+
 $rootScope.GotFriend = function(connected, friend)
 {
+  console.log("rootScope.GotFriend");
+
   if(connected)
   {
     friend.category_names = "";
     for(var i=0; i< friend.categories.length; i++)
-    {
-     friend.category_names +=friend.categories[i].name+', ';
+    {            
+      if($rootScope.isFriendsCategoryPublic(friend.categories[i]))
+      {        
+        friend.category_names +=friend.categories[i].name+', ';
+      }
+     
     }
-    friend.category_names = friend.category_nausermes.replace(/,\s*$/, "");
+    friend.category_names = friend.category_names.replace(/,\s*$/, "");
 
     var found = false;
     for(var i=0; i< $rootScope.user.friends.length; i++)
@@ -333,14 +375,16 @@ $rootScope.GotFriend = function(connected, friend)
       }
     }
 
+    //console.log(friend);
+
     if(!found)
     {      
-        friend.notified = true;            
-        $rootScope.notifications++;
-        $rootScope.user.friends.push(friend); 
+      friend.notified = true;            
+      $rootScope.notifications++;
+      $rootScope.user.friends.push(friend); 
     }
 
-      UserService.setUser($rootScope.user); 
+    UserService.setUser($rootScope.user); 
 
     $scope.$apply();    
     $ionicLoading.hide();
@@ -446,10 +490,9 @@ $rootScope.GotFriend = function(connected, friend)
   //This method is executed when the user press the "Login with facebook" button
   $scope.facebookSignIn = function() 
   {
-
     if(ConnectivityMonitor.checkConnection())
     {
-      //console.log("Starting FB Login");
+      console.log("Starting FB Login");
       $rootScope.showToast('Logging in...');
 
       //$rootScope.connectionStatus = "not-connected";
@@ -480,7 +523,7 @@ $rootScope.GotFriend = function(connected, friend)
         console.log($rootScope.connectionStatus);
 
         if(typeof FB != "undefined" && $rootScope.connectionStatus != "not-connected")
-        {
+        {          
           FB.login(function(response)
           {            
             var authResponse = response.authResponse;
@@ -526,7 +569,8 @@ $rootScope.GotFriend = function(connected, friend)
   
   };
 
-  ConnectivityMonitor.startWatching($rootScope.showConnectionStatus)
+  ConnectivityMonitor.startWatching($rootScope.showConnectionStatus);
+  $rootScope.showConnectionStatus($rootScope.connectionStatus);
 })
 
 //Side Menu functionality goes here
@@ -549,6 +593,7 @@ $rootScope.GotFriend = function(connected, friend)
 
   $scope.logOut = function() 
   {
+
     $rootScope.showToast('Logging out...');
 
     if(typeof AWS != "undefined")
@@ -591,9 +636,10 @@ $rootScope.GotFriend = function(connected, friend)
 })
 
 
-.controller('HomeCtrl', function($ionicPlatform, $rootScope, $scope, UserService, DbService, $state, $filter, $ionicLoading, $ionicPopup, $ionicScrollDelegate, $cordovaToast, $timeout, $ionicModal){
+.controller('HomeCtrl', function($ionicPlatform, $rootScope, $scope, UserService, DbService, $state, $filter, $ionicLoading, $ionicPopup, $ionicScrollDelegate, $ionicListDelegate, $cordovaToast, $timeout, $ionicModal){
 
-console.log("in Home");
+  console.log("in Home");
+
 	$rootScope.user = UserService.getUser();
 
   if(typeof $rootScope.user.categories == "undefined" || $rootScope.user.categories == "")
@@ -605,11 +651,8 @@ console.log("in Home");
   {
       $rootScope.user.categories[i].checked = false;
   }
-  
 
-  
-
-
+console.log($rootScope.user);
 
    $scope.showHomeTab = function(tabId)
   {
@@ -646,28 +689,29 @@ console.log("in Home");
   {
     $rootScope.gotData(ok,  userFromServer);
     $scope.$broadcast('scroll.refreshComplete');
+    $rootScope.showConnectionStatus($rootScope.connectionStatus);
   }
 
- $scope.doRefresh = function() 
- {
+  $scope.doRefresh = function() 
+  {
   $("#connecting").show();
    DbService.ReloadData($scope.refreshComplete);
- };
+  };
 
- $scope.notConnected = function()
- {
+  $scope.notConnected = function()
+  {
   $rootScope.showToast('Not connected to Server');
- }
+  }
 
- $scope.connected = function()
- {
+  $scope.connected = function()
+  {
   $rootScope.showToast('You are connected');
- }
+  }
 
- $scope.connecting = function()
- {
+  $scope.connecting = function()
+  {
   $rootScope.showToast('Connection in process');
- }
+  }
 
   $scope.addNewCategory = function()
   {
@@ -761,7 +805,44 @@ console.log("in Home");
       }
     }
   }
+
+  $scope.deleteCategory = function(myCategory)
+  {
+    console.log(myCategory);
+    $ionicPopup.confirm(
+    {
+      title: "Delete Category",
+      content: "<strong>All Items in this Category will be lost!</strong> </br> Are you sure you would like to delete: " + myCategory.name +"?"
+    }).then(function(res) 
+    {
+      if(res)
+      {        
+        for(var i=0; i< $rootScope.user.categories.length; i++)
+        {
+          if($rootScope.user.categories[i].id == myCategory.id)
+          {
+            $rootScope.user.categories.splice(i, 1);
+          }
+        }                                
+
+        //Store the the data in the local storage and AWS
+
+        $rootScope.showToast("Saving");
+
+        DbService.Store($rootScope.user, null);
+      }
+
+      $ionicListDelegate.closeOptionButtons();
+      $scope.closeModal();
+    });
+  }
   
+  $scope.goToItem = function(itemId)
+  {
+    console.log(itemId);
+    //<a href="#/app/item/{{item.id}}">
+  }
+
   $scope.reorderItems = function(item, fromIndex, toIndex) 
   {
     //Move the item in the array
@@ -815,6 +896,8 @@ console.log("in Home");
   });
   $scope.$on('modal.shown', function() {      
     //console.log('Modal is shown!');
+    $("#editCategoryName").hide();
+      setTimeout(function() { $("#editCategoryName").show(); console.log("show")}, 500);    
   });
 
   $scope.addNewItem = function(myCategoryId)
@@ -854,8 +937,15 @@ console.log("in Home");
 
       for(var i=0; i< $rootScope.user.categories.length; i++)
       {
-        $scope.newItemId += $rootScope.user.categories[i].items.length;
+        for(var j=0; j< $rootScope.user.categories[i].items.length; j++)
+        {
+          if($rootScope.user.categories[i].items[j].id > $scope.newItemId)
+          {
+            $scope.newItemId = $rootScope.user.categories[i].items[j].id;
+          }
+        }        
       }
+      $scope.newItemId = $scope.newItemId +1;
 
      // console.log("$scope.newItemId: "+ $scope.newItemId);
       
@@ -958,28 +1048,40 @@ console.log("in Home");
                                   image_name: $scope.Item.images[0].image_name,
                                   image_type:  $scope.Item.images[0].image_type,  
                                   image_index: 0
-                                };  
-      
+                                };     
    }
     
     $timeout(function() {
-      console.log("Google Search finished");
-
-      console.log("New Item:");
-      console.log($scope.Item);
-
+      //console.log("Google Search finished");
+      //console.log("New Item:");
+      //console.log($scope.Item);
       $rootScope.newItemFromHome = $scope.Item;
-
-
       $scope.addNewItem();
-
-    
-    $scope.$apply();
-    });
-    
+      $scope.$apply();
+    });    
   }
 
+  $scope.removeNotifications = function(friendId)
+  {
+    console.log("removeNotifications");
+    
+    for(var i=0; i< $rootScope.user.friends.length; i++)
+    {
+      if($rootScope.user.friends[i].user_id == friendId)
+      {
+        if($rootScope.user.friends[i].notified)
+        {
+          $rootScope.notifications--;
+          $rootScope.user.friends[i].notified = false;  
 
+          UserService.setUser($rootScope.user);         
+        }
+       
+       break;
+      }
+    }
+    //console.log($rootScope.user.friends);   
+  }
 
   //for scrolling
   if(typeof $rootScope.user.categories != "undefined")
@@ -1004,15 +1106,28 @@ console.log("in Home");
               ));
       }
       document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
+
+      if($rootScope.show_friends)
+      {
+        console.log($rootScope.show_friends);
+        $rootScope.show_friends = false;
+        $scope.showHomeTab('friends');        
+      }
+
     });
   }
     // end for scrolling
-	
+    
+    setTimeout(function() { $rootScope.showConnectionStatus($rootScope.connectionStatus);}, 100);    
+    
+
 })
 
 .controller('ItemCtrl', function($rootScope, $scope, $timeout, UserService, DbService, $state, $stateParams, $ionicLoading, $ionicModal, $ionicSlideBoxDelegate, $ionicPopup, $ionicListDelegate, $ionicScrollDelegate, $cordovaCamera, $cordovaFile, ConnectivityMonitor, $cordovaSocialSharing)
 {
   $scope.newItem = false;
+
+  $scope.connectionStatus = $rootScope.connectionStatus;
 
   if(typeof $rootScope.checkedCheckboxes == "undefined")
   {
@@ -1073,8 +1188,15 @@ console.log("in Home");
 
     for(var i=0; i< $rootScope.user.categories.length; i++)
     {
-      $scope.newItemId += $rootScope.user.categories[i].items.length;
+      for(var j=0; j< $rootScope.user.categories[i].items.length; j++)
+      {
+        if($rootScope.user.categories[i].items[j].id > $scope.newItemId)
+        {
+          $scope.newItemId = $rootScope.user.categories[i].items[j].id;
+        }
+      }        
     }
+    $scope.newItemId = $scope.newItemId +1;
 
    // console.log("$scope.newItemId: "+ $scope.newItemId);
     
@@ -1131,7 +1253,7 @@ console.log("in Home");
   }
 
 
-  console.log($scope.Item);
+  //console.log($scope.Item);
 
   $("#itemDataName").attr("placeholder",$scope.Item.name);
 
@@ -1146,6 +1268,10 @@ console.log("in Home");
     $("#example-elastic-header").height(320);
   }
 
+$scope.scrollTop = function()
+{
+  $ionicScrollDelegate.scrollTop(true);
+}
 
 $scope.makePrivate = function()
 {  
@@ -1728,6 +1854,7 @@ $scope.editItems = function(ItemAttribute)
 
     $scope.editCategory = function(myCategory)
     {
+
       $ionicPopup.prompt(
      {
        title: 'Edit Category',
@@ -2125,41 +2252,20 @@ $scope.shareLocalImage = function(base64Image)
       });
       // end for scrolling
 
+      setTimeout(function() { $rootScope.showConnectionStatus($rootScope.connectionStatus);}, 1000);    
+
 })
 
 .controller('FriendsCtrl', function($rootScope, $scope, DbService, UserService, $state, $ionicLoading){
 
   console.log("in FriendsCtrl");
 
-  console.log($rootScope.user);
-
-  $scope.removeNotifications = function(friendId)
-  {
-    
-    for(var i=0; i< $rootScope.user.friends.length; i++)
-    {
-      if($rootScope.user.friends[i].user_id == friendId)
-      {
-        if($rootScope.user.friends[i].notified)
-        {
-          $rootScope.notifications--;
-          $rootScope.user.friends[i].notified = false;  
-
-          UserService.setUser($rootScope.user);         
-        }
-       
-       break;
-      }
-    }
-
-    console.log($rootScope.user.friends);   
-  }
-
+  //console.log($rootScope.user);
 
 })
 
 
-.controller('FriendCtrl', function($rootScope, $scope, $stateParams, $timeout, UserService){
+.controller('FriendCtrl', function($rootScope, $scope, $stateParams, $timeout, UserService, $ionicHistory){
 
   console.log("in Friend");
 
@@ -2170,15 +2276,48 @@ $scope.shareLocalImage = function(base64Image)
     if($rootScope.user.friends[i].user_id == $stateParams.friendId)
     {
         $rootScope.currentFriend = $rootScope.user.friends[i];
-        
     }
   }
 
-  console.log($stateParams);
-
-  console.log($rootScope.currentFriend);
 
 
+  //console.log($stateParams);
+  var private_categories_count = 0;
+  for(var i=0; i< $rootScope.currentFriend.categories.length; i++ )
+  {
+    var private_items_count = 0;
+    $rootScope.currentFriend.categories[i].is_public = true;
+    for(var j=0; j< $rootScope.currentFriend.categories[i].items.length; j++)
+    {
+      if($rootScope.currentFriend.categories[i].items[j].is_public == false)
+      {
+        console.log($rootScope.currentFriend.categories[i].items[j].is_public);
+        private_items_count++;
+      }
+    }
+
+    if($rootScope.currentFriend.categories[i].items.length == private_items_count)
+    {
+      $rootScope.currentFriend.categories[i].is_public = false;
+      private_categories_count++;      
+    }
+  }
+
+  $scope.AllCategoriesPrivate = false;
+  if($rootScope.currentFriend.categories.length == private_categories_count)
+  {
+    $scope.AllCategoriesPrivate = true;
+  }
+
+//console.log($rootScope.currentFriend);
+//console.log($scope.AllCategoriesPrivate);
+//console.log($rootScope.currentFriend.categories.length);
+
+$scope.showFriends = function()
+  {
+    $rootScope.show_friends = true;
+    $ionicHistory.goBack();
+  }
 
   $timeout(function()
     {
@@ -2187,17 +2326,20 @@ $scope.shareLocalImage = function(base64Image)
       
       for(var i = 0; i< $rootScope.currentFriend.categories.length; i++)
       {
-        myScrolls.push(
-            new iScroll('wrapper' + i, 
-              { 
-                momentum: true,
-                fadeScrollbar: true,
-                hideScrollbar: true, 
-                hScrollbar: true,
-                snap: 'li',
-                checkDOMChanges: true
-              }
-              ));
+        if($rootScope.currentFriend.categories[i].is_public)
+        {
+          myScrolls.push(
+              new iScroll('wrapper_friend' + i, 
+                { 
+                  momentum: true,
+                  fadeScrollbar: true,
+                  hideScrollbar: true, 
+                  hScrollbar: true,
+                  snap: 'li',
+                  checkDOMChanges: true
+                }
+                ));
+        }
       }
       document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
     
@@ -2205,7 +2347,7 @@ $scope.shareLocalImage = function(base64Image)
 
 })
 
-.controller('FriendsItemCtrl', function($rootScope, $scope, $timeout, UserService, DbService, $state, $stateParams, $ionicLoading, $ionicModal, $ionicSlideBoxDelegate, $ionicPopup, $ionicListDelegate, $ionicScrollDelegate, $cordovaCamera, $cordovaFile, ConnectivityMonitor, $cordovaSocialSharing){
+.controller('FriendsItemCtrl', function($rootScope, $scope, $timeout, UserService, DbService, $state, $stateParams, $ionicLoading, $ionicModal, $ionicSlideBoxDelegate, $ionicHistory, $ionicPopup, $ionicListDelegate, $ionicScrollDelegate, $cordovaCamera, $cordovaFile, ConnectivityMonitor, $cordovaSocialSharing){
 
   console.log("in FriendsItemCtrl");
 
@@ -2216,18 +2358,30 @@ $scope.shareLocalImage = function(base64Image)
   for(var i=0; i< $rootScope.currentFriend.categories.length; i++)
   {
     for(var j=0; j< $rootScope.currentFriend.categories[i].items.length; j++)
-    {
+    {      
+      console.log("making false")
+      console.log("($rootScope.currentFriend.categories["+i+"] " + $rootScope.currentFriend.categories[i].name);
+
       $rootScope.currentFriend.categories[i].checked = false;
+
       if($rootScope.currentFriend.categories[i].items[j].id == $stateParams.itemId)
-      {
+      {        
         $scope.Item = $rootScope.currentFriend.categories[i].items[j];
         $rootScope.currentFriend.categories[i].checked = true;
-      }
+
+       console.log("making true")
+       console.log("($rootScope.currentFriend.categories["+i+"] " + $rootScope.currentFriend.categories[i].name);
+        break;
+      }      
+      
     }
+    
   }
 
   console.log($rootScope.currentFriend.categories);    
+  $scope.Item.style = "red";
   console.log($scope.Item);
+
 
 //$("#my-item").css('background-image', 'url(' + $scope.Item.default_image.image_name + ')');
 
@@ -2374,6 +2528,16 @@ $scope.shareLocalImage = function(base64Image)
 
   base64Image = null;
   file = null;
+}
+
+  $scope.goBack = function()
+  {
+    $ionicHistory.goBack();
+  }
+
+  $scope.scrollTop = function()
+{
+  $ionicScrollDelegate.scrollTop(true);
 }
 
   $scope.shareItem = function()

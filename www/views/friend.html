@@ -1,37 +1,30 @@
 
-<ion-view class="home-view" view-title="{{currentFriend.name}}'s Items">
+<ion-view class="home-view">
 
-<ion-nav-bar class="bar-posiitive">
-      <ion-nav-back-button>
+<ion-nav-bar class="bar-positive">
+      <ion-nav-back-button ng-click="showFriends()">
       </ion-nav-back-button>
 
       <ion-nav-buttons side="left">
         <button class="button button-icon button-clear ion-navicon" menu-toggle="left"></button>
       </ion-nav-buttons>
 
-      <ion-nav-buttons side="right">
-       <!-- New Item button -->
-        
+      <ion-nav-buttons side="right">               
       </ion-nav-buttons>
     </ion-nav-bar>
 
-
-  <div class="bar bar-subheader item-input-inset bar-light">
-    <label class="item-input-wrapper">
-      <i class="icon ion-search placeholder-icon"></i>
-      <input type="search" ng-model="query" placeholder="Search">
-    </label>
-  </div>
-
-
-  <ion-content class="has-subheader padding" style="top:65px !important" delegate-handle="mainScroll">
-
-
+    
+    <div class="friend-title" ng-click="showFriends()">          
+          <span class="friend-name">{{currentFriend.name}}</span>
+          <img class="friend-name-img" ng-src="{{currentFriend.picture}}">
+        </div>       
+    
+  <ion-content class="padding" delegate-handle="mainScroll">
 
      <div id="wrapperV">
         <div id="scrollerV" >
           <ul id="scrollerList">
-            <li ng-repeat="category in currentFriend.categories | filter:categoryHasVisibleItems track by $index" >                  
+            <li ng-repeat="category in currentFriend.categories | filter:categoryHasVisibleItems track by $index" ng-if="category.is_public">                  
               <div  class="item-input">
                 <div class="category-wrapper">
                   <a href="#" class="category-link" ng-click="editCategory({{category.id}})">
@@ -45,17 +38,17 @@
                 </a>
                 </div>        
               </div>              
-              <div class="category"  id="wrapper{{$index}}">
+              <div class="category"  id="wrapper_friend{{$index}}">
                 <div id="scroller{{$index}}" style="width:{{((category.items.length +1) * 160) + 300}}px">
                   <ul>
-                    <li ng-repeat="item in category.items | orderBy:'-' | filter: query track by $index " item-height="140" item-width="140" >
+                    <li ng-repeat="item in category.items | orderBy:'-' | filter: query track by $index " item-height="140" item-width="140" ng-if="item.is_public" >
                       <div class="photo" id="image_wrapper_{{category.id}}_{{$index}}">
                         <a href="#/app/friendsitem/{{item.id}}">
                           <div class="thumbnail" >  
                             <img ng-src="{{item.default_image.image_name}}" src="icons/apple-icon-precomposed.png" alt="{{ item.name }} Photo" class="portrait" onerror="ImgError(this)" on-hold="onHold('{{$index}}','{{category.id}}')">
                           </div>
                         </a>
-                        <p>{{item.name | limitTo: 39}} {{item.name.length > 39 ? '&hellip;' : ''}}</p>
+                        <p>{{item.name | limitTo: 39}} {{item.name.length > 39 ? '&hellip;' : ''}}</p>                        
                       </div>
                     </li>
                     <li ng-if="category.items.length == 0">
@@ -69,6 +62,10 @@
             
           </ul>
         </div>
+      </div>
+
+      <div id="AllCategoriesPrivate" ng-if="AllCategoriesPrivate">
+        There are no available categories
       </div>
 
 

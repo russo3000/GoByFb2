@@ -1,23 +1,23 @@
-<ion-view view-title="" hide-nav-bar="false" >
+<ion-view class="home-view">
 
-
-<ion-nav-bar class="bar-light">
+<ion-nav-bar class="bar-positive">
     <ion-nav-back-button>
     </ion-nav-back-button>
-  <ion-nav-buttons side="right">
-    <button class="itemButton button-border-a button button-icon ion-android-share-alt" ng-click="shareItem()" ng-if="!newItem"> </button>         	
+  <ion-nav-buttons side="right">              
+          <button class="itemButton button-border-a button button-icon ion-android-share-alt" ng-click="shareItem()" ng-if="!newItem"> </button>
     </ion-nav-buttons>
 </ion-nav-bar>
 
+ <div class="friend-title" ng-click="goBack()">          
+          <span class="friend-name">{{currentFriend.name}}</span>
+          <img class="friend-name-img" ng-src="{{currentFriend.picture}}">
+        </div>   
+
  <div id="editFriendItemName" class="friend-item-name fixedElement">
-            {{Item.name}}
-          </label>
+   {{Item.name | limitTo: 50}} {{Item.name.length > 50 ? '&hellip;' : ''}}
   </div>
 
-  <div id="my-item">
-
-
- 
+  <div id="my-item" class="my-item-friend">
 
   <ion-content id="item-content" delegate-handle="example-scroller" elastic-header="example-elastic-header" overflow-scroll="false">
 
@@ -87,18 +87,36 @@
    
 
 
-        <ion-item class="ion-text-wrap" id="item-categories" style="display:block;">
+         <ion-item class="ion-text-wrap" id="item-categories" style="display:block;">
           <div class="cat-spacer">&nbsp;</div>
-          <div class="max-width categories-header"> 
-            <div class="button-icon ion-pricetags left max-width"> 
-              Categories: 
-              <div ng-repeat="category in currentFriend.categories track by $index" item="category" >         
-                <div class="cb-img"> <img src="img/checked.png" height="30px"  ng-if="category.checked"> </div>
-                <div class="cb-txt"  ng-if="category.checked">{{ category.name }}</div>
-              </div>
-              </div>         
-          </div>        
-        </ion-item>
+            <div class="max-width categories-header"> 
+              <div class="button-icon ion-pricetags left"> Categories: </div>                       
+            </div>        
+            <ion-list show-delete="data.showDelete" show-reorder="data.showReorder" class="max-width left">     
+              <ion-item ng-repeat="category in currentFriend.categories track by $index" item="category" class="item-remove-animate">          
+                 <label class="checkbox max-width">
+                   <input type="checkbox" name="category" categoryid="{{category.id}}" class="category-checkbox" ng-model="category.checked"onclick="return false"> 
+                  {{ category.name }}                  
+                 </label>                 
+              </ion-item>
+            </ion-list>      
+         
+         </ion-item>
+            <div class="cat-spacer">&nbsp;</div>
+
+              <ul>
+                <li ng-repeat="image in Item.images track by $index " id="li_image_{{$index}}" ng-click="goToSlide({{$index}})">
+                    <img ng-src="{{image.image_name}}" style="width:100%" >
+                    <div class="cat-spacer">&nbsp;</div>
+                </li>
+              </ul>             
+
+              <center>
+                <button class="itemButton button button-icon ion-arrow-up-c" style="font-size:100px" ng-click="scrollTop()"> </button><br>
+                <button class="itemButton button button-icon ion-ios-circle-filled" style="font-size:30px" ng-click="scrollTop()"> </button>
+                <button class="itemButton button button-icon ion-ios-circle-filled" style="font-size:30px" ng-click="scrollTop()"> </button>
+                <button class="itemButton button button-icon ion-ios-circle-filled" style="font-size:30px" ng-click="scrollTop()"> </button>
+              </center>   
 
       </div>
   

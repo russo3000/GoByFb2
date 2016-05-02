@@ -3474,7 +3474,7 @@ a.subdued {
   z-index: 9; }
 
 .bar .back-button.hide, .bar .buttons .hide {
-  display: none; }
+  display: none !important; }
 
 .nav-bar-tabs-top .bar {
   background-image: none; }
@@ -7289,7 +7289,7 @@ a.button {
  * --------------------------------------------------
  */
 .hide {
-  display: none; }
+  display: none !important; }
 
 .opacity-hide {
   opacity: 0; }

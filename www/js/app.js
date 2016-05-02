@@ -31,8 +31,8 @@ angular.module('starter', ['ionic', 'controllers', 'services','ngCordova'])
 
       // Set transform origin to top:
       header.style[ionic.CSS.TRANSFORM + 'Origin'] = 'center bottom';
-      default_image.style[ionic.CSS.TRANSFORM + 'Origin'] = 'center bottom';
       
+      default_image.style[ionic.CSS.TRANSFORM + 'Origin'] = 'center bottom';
       
       
       // Update header height on resize:
@@ -57,10 +57,9 @@ angular.module('starter', ['ionic', 'controllers', 'services','ngCordova'])
         if (scrollTop >= 0) 
         {
           // Scrolling up. 
-
-
+  
           translateAmt2 = -scrollTop /2 ;                              
-          scaleAmt2 = scrollTop / (headerHeight) + 1;              
+          scaleAmt2 = scrollTop / (headerHeight) + 1;   
         } 
         else 
         {
@@ -74,9 +73,9 @@ angular.module('starter', ['ionic', 'controllers', 'services','ngCordova'])
 
         // Update header with new position/size:
         header.style[ionic.CSS.TRANSFORM] = 'translate3d(0,'+(translateAmt)+'px,0) scale('+scaleAmt+','+scaleAmt+')';
+
         default_image.style[ionic.CSS.TRANSFORM] = 'translate3d(0,'+(translateAmt2)+'px,0) scale('+1+','+1+')';
-        
-        
+                        
         ticking = false;
       }
     }

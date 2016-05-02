@@ -483,7 +483,11 @@ angular.module('services', [])
 
   function checkConnection()
   {
-    if(navigator && navigator.connection && navigator.connection.type === 'none') 
+    //console.log(navigator);
+    //console.log(navigator.connection);
+    //console.log(navigator.connection.type);
+
+    if(navigator && (typeof navigator.connection == "undefined" || navigator.connection.type === 'none') )
     {
       return false;
     }

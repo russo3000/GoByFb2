@@ -8,7 +8,7 @@
     
     
     <button class="itemButton button-border-a button button-icon ion-checkmark" ng-click="saveItem(true)" ng-if="newItem"></button>    
-    <button class="itemButton button-border-a button button-icon ion-android-share-alt" ng-click="shareItem()" ng-if="!newItem"> </button>          
+    <button class="itemButton button-border-a button button-icon ion-android-share-alt" ng-click="shareItem()" ng-if="!newItem"> </button>         	
     <button id="choose-img-btn" class="itemButton button button-icon ion-images" ng-click="imageSelection()"> </button>
     <button class="itemButton button-border-b button button-icon ion-trash-b" ng-click="deleteItem()" ng-if="!newItem"> </button> 
 
@@ -45,6 +45,8 @@
 
 
   <ion-content id="item-content" delegate-handle="example-scroller" elastic-header="example-elastic-header" overflow-scroll="false" has-bouncing="true" scrollbar-y="true">
+
+
 
       <div id="part-1"> 
           
@@ -83,23 +85,6 @@
               <button id="button_phone" class="itemButton button button-icon ion-ios-telephone" ng-click="showItemTab('phone')" > </button>
               <button ng-if="Item.opening_hours" id="button_time" class="itemButton button button-icon ion-ios-clock" ng-click="showItemTab('time')" > </button>      
           </div>
-
-
- <div class="bar item-input-inset bar-light connection-status">
-        <div id="not-connected" class="bar bar-assertive" ng-click="notConnected()">
-          <div class="connection-status-text">Working Offline</div>
-        </div>        
-        <div id="connected"  class="bar bar-balanced" ng-click="connected()">
-          <div class="connection-status-text">Working Online</div>
-        </div>
-        <div id="connecting" class="bar bar-balanced" ng-click="connecting()">
-          <div class="connection-status-text">
-            <div class="connecting">Connecting <img src="img/loading.gif" height="20px" class="loading" ></div> 
-          </div>
-        </div>
-    </div>
-
-
           <div id="main">
             <ion-item class="item item-text-wrap item-icon-left item-icon-right item-remove-animate">          
               <i class="icon ion-ios-bookmarks-outline"></i>
@@ -160,44 +145,44 @@
 
         <ion-item class="ion-text-wrap" id="item-categories" style="display:block;">
           <div class="cat-spacer">&nbsp;</div>
-            <div class="max-width categories-header"> 
-              <div class="button-icon ion-pricetags left"> Categories: </div>         
-              <div class="button-icon ion-arrow-move right" ng-click="data.showDelete = false; data.showReorder = !data.showReorder; toggleCategories();"></div>
-              <div id="category_btn" class="button-icon ion-plus-circled right" ng-click="addNewCategory()" ></div>
-              <div id="categoryRequired" class="left">
-              * Please select atleast one category
-              </div>
-            </div>        
-            <ion-list show-delete="data.showDelete" show-reorder="data.showReorder" class="max-width left">     
-              <ion-item ng-repeat="category in user.categories track by $index" item="category" class="item-remove-animate">          
-                 <label class="checkbox max-width">
-                   <input type="checkbox" name="category" categoryid="{{category.id}}" class="category-checkbox" ng-click="clickItem(category);" ng-change="updateItemSelectedCategoryValues()" ng-model="category.checked"> 
-                  {{ category.name }}
-                  <div class="right"><i class="ion-icon calm ion-arrow-left-a"></i> <i class="ion-icon calm ion-edit"></i></div>
-                 </label>
-                 <ion-option-button class="button-positive ion-edit option-border-a" ng-click="editCategory(category);"></ion-option-button>
-                 <ion-option-button class="button-assertive ion-trash-b option-border-b" ng-click="deleteCategory(category);"></ion-option-button>
-                 <ion-reorder-button class="ion-navicon" on-reorder="reorderCategory(category, $fromIndex, $toIndex)"></ion-reorder-button>
-              </ion-item>
-            </ion-list>      
+      			<div class="max-width categories-header">	
+      				<div class="button-icon ion-pricetags left"> Categories: </div>					
+      				<div class="button-icon ion-arrow-move right" ng-click="data.showDelete = false; data.showReorder = !data.showReorder; toggleCategories();"></div>
+      				<div id="category_btn" class="button-icon ion-plus-circled right" ng-click="addNewCategory()" ></div>
+      				<div id="categoryRequired" class="left">
+      				* Please select atleast one category
+      				</div>
+      			</div>				
+      			<ion-list show-delete="data.showDelete" show-reorder="data.showReorder" class="max-width left">			
+      		    <ion-item ng-repeat="category in user.categories track by $index" item="category" class="item-remove-animate">					
+      			     <label class="checkbox max-width">
+      			       <input type="checkbox" name="category" categoryid="{{category.id}}" class="category-checkbox" ng-click="clickItem(category);" ng-change="updateItemSelectedCategoryValues()" ng-model="category.checked"> 
+      				    {{ category.name }}
+      				    <div class="right"><i class="ion-icon calm ion-arrow-left-a"></i> <i class="ion-icon calm ion-edit"></i></div>
+      			     </label>
+      			     <ion-option-button class="button-positive ion-edit option-border-a" ng-click="editCategory(category);"></ion-option-button>
+      			     <ion-option-button class="button-assertive ion-trash-b option-border-b" ng-click="deleteCategory(category);"></ion-option-button>
+      			     <ion-reorder-button class="ion-navicon" on-reorder="reorderCategory(category, $fromIndex, $toIndex)"></ion-reorder-button>
+      		    </ion-item>
+      			</ion-list>      
          
-         </ion-item>
+      	 </ion-item>
             <div class="cat-spacer">&nbsp;</div>
 
               <ul>
                 <li ng-repeat="image in Item.images track by $index " id="li_image_{{$index}}" ng-click="goToSlide()">
-                    <img ng-src="{{image.image_name}}" style="width:100%"  ng-click="makeDefault('image_{{$index}}','{{$index}}')" onerror="ImgError(this)">
+                    <img ng-src="{{image.image_name}}" style="width:100%"  ng-click="makeDefault('image_{{$index}}','{{$index}}')">
                     <div class="cat-spacer">&nbsp;</div>
                 </li>
               </ul>             
 
               <center>
-                <button class="itemButton button button-icon ion-arrow-up-c" style="font-size:100px" ng-click="scrollTop()"> </button><br>
-                <button class="itemButton button button-icon ion-ios-circle-filled" style="font-size:30px" ng-click="scrollTop()"> </button>
-                <button class="itemButton button button-icon ion-ios-circle-filled" style="font-size:30px" ng-click="scrollTop()"> </button>
-                <button class="itemButton button button-icon ion-ios-circle-filled" style="font-size:30px" ng-click="scrollTop()"> </button>
-              </center>               
-            </div>
+<button class="itemButton button button-icon ion-arrow-up-c" style="font-size:100px"> </button><br>
+<button class="itemButton button button-icon ion-ios-circle-filled" style="font-size:30px"> </button>
+<button class="itemButton button button-icon ion-ios-circle-filled" style="font-size:30px"> </button>
+<button class="itemButton button button-icon ion-ios-circle-filled" style="font-size:30px"> </button>
+</center>               
+      </div>
 
 
     <script language="JavaScript" type="text/javascript">
@@ -205,36 +190,28 @@
     {
       var scope = angular.element($("#my-item")).scope();
 
-      if(scope.connectionStatus == "connected")
+      var found = false;
+      for(var i = 0; i< scope.Item.images.length; i++)
       {
-          var found = false;
-          for(var i = 0; i< scope.Item.images.length; i++)
-          {
-            if(scope.Item.images[i].image_name == source.src)
-            {
-              found = true;
-              break;
-            }
-          }
-
-          if(found)
-          {
-            scope.Item.images.splice(i, 1);
-            scope.$apply();
-
-            //console.log(scope.Item);
-          } 
-      }
-      else
-      {
-        console.log("replacing src");
-        source.src = "icons/apple-icon-precomposed.png";
+        if(scope.Item.images[i].image_name == source.src)
+        {
+          found = true;
+          break;
+        }
       }
 
+      if(found)
+      {
+        scope.Item.images.splice(i, 1);
+        scope.$apply();
+
+        //console.log(scope.Item);
+      }
+      
       return true;
     }
-    </script>     
-      
+    </script>
+  		
   </ion-content>
 
 

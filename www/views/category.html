@@ -2,11 +2,12 @@
   <div id="category-modal">
     <ion-nav-bar class="bar-positive">
       <ion-nav-buttons side="left">
+      <button class="itemButton button-border-b button button-icon ion-chevron-left" ng-click="closeModal()" > Back</button>  
       </ion-nav-buttons>
         
       
-      <ion-nav-buttons side="right">
-        <button class="itemButton button-border-b button button-icon ion-close-circled" ng-click="closeModal()" > </button>  
+      <ion-nav-buttons side="right">        
+        
       </ion-nav-buttons>
 
     </ion-nav-bar>
@@ -26,9 +27,15 @@
     <ion-content class="has-subheader">   
         
       <div ng-if="currentCategory.items.length > 0" class="category-items">
-        <h3 class="nowrap reorder"> Reorder Items <i class="ion-navicon"></i></h3>
+        <div id="reorder" class="nowrap"><i class="ion-navicon"></i> Reorder</div>
         <ion-list show-delete="data.showDelete" show-reorder="shouldShowReorder" class="max-width left">
-          <ion-item ng-repeat="item in currentCategory.items | orderBy:'-' track by $index" item="item" class="item item-text-wrap item-thumbnail-left item-remove-animate">
+          <ion-item ng-repeat="item in currentCategory.items | orderBy:'-' track by $index" item="item" class="item item-text-wrap item-thumbnail-left item-remove-animate" >
+
+
+
+<div ng-lick="goToItem('{{item.id}}')"> <a href="#/app/item/{{item.id}}">Go to item</a></div>
+
+
             <div class="thumbnail category-tmb" >  
               <img ng-src="{{item.default_image.image_name}}" alt="{{ item.name }} Photo"  onerror="ImgError(this)" class="portrait">
             </div>
@@ -38,7 +45,15 @@
             <ion-reorder-button class="ion-navicon" on-reorder="reorderItems(item, $fromIndex, $toIndex)"></ion-reorder-button>
           </ion-item>
         </ion-list>       
+
+        
       </div>
+
+      
+      <button class="button button-block assertive button-icon ion-trash-b" ng-click="deleteCategory(currentCategory);" > Delete this category</button>
+    
+      
+
         <script language="JavaScript" type="text/javascript">
         function ImgError(source)
         {
@@ -48,5 +63,7 @@
         }
         </script>      
     </ion-content>
+    
+
   </div>
 </ion-view>
