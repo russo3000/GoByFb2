@@ -16,8 +16,8 @@
 
 <div id="editItemNameHome" class="item-input-inset">
   <label class="item-input-wrapper"> 
-    <i class="icon ion-search placeholder-icon"></i>
-    <input type="text" id="itemDataNameHome"  ng-model="itemData.name" placeholder="Search a place" searchKey="TEST">
+    <i class="icon ion-plus-circled placeholder-icon"></i>
+    <input type="text" id="itemDataNameHome"  ng-model="itemData.name" placeholder="Add a place" searchKey="TEST">
   </label>
   <button style="position:absolute; right:15px; top:13px; color:#0c60ee; font-weight:bold" class="icon ion-arrow-right-a" ng-click="addNewItem()" ng-if="user.categories.length > 0"></button>
   <!--
@@ -46,6 +46,9 @@
             <div id="home-notifications" class="badge badge-assertive" menu-toggle="left" ng-if="notifications >0">{{notifications}}</div>
           </div>
           -->
+          <div id="button_side_menu">                     
+              <button id="btn_settings" class="itemButton button button-icon ion-ios-gear active" menu-toggle="right" ng-click="toogleSidemenu()" > </button>
+          </div>
           <div id="button_friends">                     
               <button id="btn_friends" class="itemButton button button-icon ion-ios-people active" ng-click="showHomeTab('friends')" > </button>
           </div>              

@@ -3,22 +3,26 @@
     <ion-nav-view name="menuContent"></ion-nav-view>
   </ion-side-menu-content>
 
-  <ion-side-menu side="left">
+  <ion-side-menu side="right">
     <ion-content>
       <ion-list>
         <ion-item class="profile">
-          <div class="user" ng-style="{'background-image':'url('+user.picture+')'}" ng-click="goHome()" menu-close></div>
+          <div class="user" ng-style="{'background-image':'url('+user.picture+')'}" ng-click="goHome();toogleSidemenu();" menu-close></div>
         </ion-item>
 
 
-        <ion-item menu-close class="item item-text-wrap item-icon-left" href="#/app/home">
+        <ion-item menu-close class="item item-text-wrap item-icon-left" href="#/app/home" ng-click="goHome();toogleSidemenu();">
           <i class="icon ion-ios-home"></i>
           <div class="item-text-side-menu" >Home </div>
         </ion-item>
 
-        <ion-item menu-close class="item item-text-wrap item-icon-left" href="#/app/friends">
+        <!--<ion-item menu-close class="item item-text-wrap item-icon-left" href="#/app/friends">
           <i class="icon ion-ios-people"></i>
           <div class="item-text-side-menu" >My Friend's Lists <span class="badge badge-assertive" ng-if="notifications >0">{{notifications}}</span></div>
+        </ion-item>-->
+        <ion-item menu-close class="item item-text-wrap item-icon-left" href="#/app/categories">
+          <i class="icon ion-pricetags"></i>
+          <div class="item-text-side-menu" >Edit Categories</div>          
         </ion-item>
         <!--
         <ion-item menu-close  class="item item-text-wrap item-icon-left" href="#">

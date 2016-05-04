@@ -261,21 +261,16 @@ $rootScope.searchFromFlicker3 = function(searchValuePrimary, place, images_from_
    // Show the action sheet
    var hideSheet = $ionicActionSheet.show({
      buttons: [
-       { text: 'Use data from Phone  <div class="action-sheet-icons"><div class="ion-ios-cloud-upload-outline action-sheet-icon"></div> <div class="ion-ios-arrow-thin-right action-sheet-icon"></div> <div class="ion-iphone action-sheet-icon" ></div></div>' },    
+       { text: 'Use data from Phone  <div class="action-sheet-icons"><div class="ion-ios-cloud-upload-outline action-sheet-icon"></div> <div class="ion-ios-arrow-thin-right action-sheet-icon"></div> <div class="ion-iphone action-sheet-icon" ></div></div>' }
+
      ],
-     titleText: 'Synchronization',    
-    destructiveText: 'Use data from Server  <div class="action-sheet-icons"><div class="ion-iphone action-sheet-icon"></div> <div class="ion-ios-arrow-thin-right action-sheet-icon"></div> <div class="ion-ios-cloud-download-outline action-sheet-icon" ></div></div>' ,
+     titleText: '<center>Synchronization</center>Data on your phone is not the same as data on the server.',    
+    destructiveText: 'Use data from Server  <div class="action-sheet-icons"><div class="ion-iphone action-sheet-icon"></div> <div class="ion-ios-arrow-thin-right action-sheet-icon"></div> <div class="ion-ios-cloud-download-outline action-sheet-icon" ></div></div>',
      
-     cancelText: 'Cancel',
-     cancel: function() {
-          // add cancel code..
-          console.log("canceled");
-          hideSheet();
-        },
     destructiveButtonClicked: function()
     {
-      console.log("Use Server data");
-      console.log(userFromServer);
+      //console.log("Use Server data");
+      //console.log(userFromServer);
 
       var tmp_friends = $rootScope.user.friends;
 
@@ -284,18 +279,44 @@ $rootScope.searchFromFlicker3 = function(searchValuePrimary, place, images_from_
 
       UserService.setUser($rootScope.user);
       
-      $scope.$apply();
-       
+
+      //for scrolling
+      if(typeof $rootScope.user.categories != "undefined")
+      {
+        $timeout(function()
+        {
+          var myScroll = new iScroll('wrapperV',{checkDOMChanges: true});
+          var myScrolls = [];
+
+          for(var i = 0; i< $rootScope.user.categories.length; i++)
+          {
+            myScrolls.push(
+                new iScroll('wrapper' + i, 
+                  { 
+                    momentum: true,
+                    fadeScrollbar: true,
+                    hideScrollbar: true, 
+                    hScrollbar: true,
+                    snap: 'li',
+                    checkDOMChanges: true
+                  }
+                  ));
+          }
+          document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
+
+        });
+      }
+
       return true;
     },  
      buttonClicked: function(index) 
      {
-        console.log("Use Phone data");
+        //console.log("Use Phone data");
 
         $rootScope.showToast('Updating Database');
         DbService.Store($rootScope.user, null);
       
-        $scope.$apply();  
+        $scope.$apply();
        return true;
      }
    });
@@ -559,7 +580,8 @@ $rootScope.GotFriend = function(connected, friend)
   
   };
 
-  if(ConnectivityMonitor.checkConnection())
+
+  if(config.isOnline)
   {
     $rootScope.connectionStatus = "connected";      
   }
@@ -569,7 +591,8 @@ $rootScope.GotFriend = function(connected, friend)
   }
 
   ConnectivityMonitor.startWatching($rootScope.showConnectionStatus);
-  $rootScope.showConnectionStatus($rootScope.connectionStatus);
+  $rootScope.showConnectionStatus($rootScope.connectionStatus);  
+
 })
 
 //Side Menu functionality goes here
@@ -651,6 +674,11 @@ $rootScope.GotFriend = function(connected, friend)
       $rootScope.user.categories[i].checked = false;
   }
 
+  $rootScope.toogleSidemenu = function()
+  {
+     $("#btn_settings").toggleClass( "active" );      
+  }
+
    $scope.showHomeTab = function(tabId)
   {
     console.log(tabId);
@@ -661,7 +689,7 @@ $rootScope.GotFriend = function(connected, friend)
             
       $("#btn_home_main").addClass("active");
       $("#btn_friends").addClass("active");
-
+            
       $("#btn_"+tabId).removeClass("active");
 
       $("#"+tabId).show(); 
@@ -708,6 +736,13 @@ $rootScope.GotFriend = function(connected, friend)
   $scope.connecting = function()
   {
   $rootScope.showToast('Connection in process');
+  }
+
+  $scope.goToItem = function(itemId)
+  {
+    console.log(itemId);
+    window.location = "#/app/item/"+itemId;
+    
   }
 
   $scope.addNewCategory = function()
@@ -839,13 +874,7 @@ $rootScope.GotFriend = function(connected, friend)
       
     });
   }
-  
-  $scope.goToItem = function(itemId)
-  {
-    console.log(itemId);
-    window.location = "#/app/item/"+itemId;
-    
-  }
+
 
   $scope.reorderItems = function(item, fromIndex, toIndex) 
   {
@@ -2259,6 +2288,150 @@ $scope.shareLocalImage = function(base64Image)
       // end for scrolling
 
       //setTimeout(function() { $rootScope.showConnectionStatus($rootScope.connectionStatus);}, 1000);    
+})
+
+.controller('CategoriesCtrl', function($rootScope, $scope, DbService, UserService, $state, $ionicLoading, $ionicModal, $ionicPopup, $ionicScrollDelegate, $ionicListDelegate){
+
+  console.log("in CategoriesCtrl");
+  $scope.addNewCategory = function()
+  {
+    //$scope.openModal();
+     $ionicPopup.prompt(
+     {
+       title: 'New category',
+       template: ' ',
+       inputType: 'text',
+       inputPlaceholder: 'Category name'
+     }).then(function(res) 
+     {
+
+      if(typeof res != "undefined")
+      {
+        var newCategoryId = 0;
+
+        if($rootScope.user.categories.length > 0)          
+        {
+         newCategoryId = ($rootScope.user.categories[$rootScope.user.categories.length -1].id + 1) ;
+        }
+
+      //console.log("newCategoryId: " + newCategoryId);
+       var newCategoryName = res;
+       if(newCategoryName != "")
+       {
+        $scope.createNewCategory(newCategoryId, newCategoryName);
+       }
+      }
+     });
+  }
+
+  $scope.createNewCategory = function(newCategoryId, newCategoryName)
+  {
+    var newCategory = {
+      "id": newCategoryId,
+      "name": newCategoryName,
+      "checked": false,
+      "items": []
+    }
+
+    //add the Item to the scope
+    $rootScope.user.categories.push(newCategory);
+    //console.log($rootScope.user);
+
+    //Store the the data in the local storage and AWS
+    $rootScope.showToast('Saving');
+    DbService.Store($rootScope.user, null);
+    
+    $ionicScrollDelegate.scrollBottom();
+  }
+
+ $scope.editCategory = function(myCategory)
+    {
+
+      $ionicPopup.prompt(
+     {
+       title: 'Edit Category',
+       template: ' ',
+       inputType: 'text',
+       inputPlaceholder: myCategory.name
+     }).then(function(res) 
+     {
+       if(typeof res != "undefined")
+       {
+         var newCategoryName = res;
+
+         if(newCategoryName != "")
+         {        
+            //update the category name
+            for(var i=0; i< $rootScope.user.categories.length; i++)
+            {
+              if($rootScope.user.categories[i].id == myCategory.id)
+              {
+                $rootScope.user.categories[i].name = newCategoryName;
+              }
+            }
+
+          //Store the the data in the local storage and AWS
+          $rootScope.showToast('Saving');
+          DbService.Store($rootScope.user, null);
+    
+         }         
+      }
+
+      $ionicListDelegate.closeOptionButtons();
+       
+     });
+    }
+
+  $scope.deleteCategory = function(myCategory)
+  {
+    console.log(myCategory);
+    $ionicPopup.confirm(
+    {
+      title: "Delete Category",
+      content: "<strong>All Items in this Category will be lost!</strong> </br> Are you sure you would like to delete: " + myCategory.name +"?"
+    }).then(function(res) 
+    {
+      if(res)
+      {        
+        for(var i=0; i< $rootScope.user.categories.length; i++)
+        {
+          if($rootScope.user.categories[i].id == myCategory.id)
+          {
+            $rootScope.user.categories.splice(i, 1);
+          }
+        }                                
+
+        //Store the the data in the local storage and AWS
+
+        $rootScope.showToast("Saving");
+
+        DbService.Store($rootScope.user, null);
+        
+        $ionicListDelegate.closeOptionButtons();
+        $scope.closeModal();
+      }
+      else
+      {
+
+      }
+
+      
+    });
+  }
+
+  $rootScope.reorderCategory = function(category, fromIndex, toIndex) 
+ {
+    //Move the item in the array
+    $rootScope.user.categories.splice(fromIndex, 1);
+    $rootScope.user.categories.splice(toIndex, 0, category);
+
+    //Store the the data in the local storage and AWS
+    $rootScope.showToast('Saving');
+    DbService.Store($rootScope.user, null);
+    
+    $ionicListDelegate.showReorder(false);
+  };
+
 })
 
 .controller('FriendsCtrl', function($rootScope, $scope, DbService, UserService, $state, $ionicLoading){

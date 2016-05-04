@@ -1,0 +1,41 @@
+
+<ion-view class="home-view" view-title="">
+
+<ion-nav-bar class="bar-posiitive">
+      <ion-nav-back-button>
+      </ion-nav-back-button>
+
+      <ion-nav-buttons side="left">      
+      <button class="button button-icon ion-pricetags" menu-toggle="right"> Categories:</button>  
+      </ion-nav-buttons>
+
+      <ion-nav-buttons side="right">   
+        <div class="header-buttons">   
+          <button class="button button-icon ion-plus-circled" ng-click="addNewCategory()"></button>        
+          <button class="button button-icon ion-ios-gear" menu-toggle="right"></button>        
+        </div>
+      </ion-nav-buttons>
+
+    </ion-nav-bar>
+  <ion-content class="padding" delegate-handle="mainScroll">
+    <div class="cat-spacer-header">
+      <div class="button-icon ion-navicon right" ng-click="data.showDelete = false; data.showReorder = !data.showReorder; toggleCategories();"> Reorder</div>
+      <!--<div id="category_btn" class="button-icon ion-plus-circled right" ng-click="addNewCategory()" ></div>-->
+    </div>
+            <ion-list show-delete="data.showDelete" show-reorder="data.showReorder" class="max-width left">     
+              <ion-item ng-repeat="category in user.categories track by $index" item="category" class="item-remove-animate">          
+                 <label class="checkbox max-width"> 
+                  <i class="icon ion-pricetag"></i> {{ category.name }}
+                  <div class="right"><i class="ion-icon calm ion-arrow-left-a"></i> <i class="ion-icon calm ion-edit"></i></div>
+                 </label>
+                 <ion-option-button class="button-positive ion-edit option-border-a" ng-click="editCategory(category);"></ion-option-button>
+                 <ion-option-button class="button-assertive ion-trash-b option-border-b" ng-click="deleteCategory(category);"></ion-option-button>
+                 <ion-reorder-button class="ion-navicon" on-reorder="reorderCategory(category, $fromIndex, $toIndex)"></ion-reorder-button>
+              </ion-item>
+            </ion-list>      
+         
+   
+            
+
+  </ion-content>
+</ion-view>

@@ -4,15 +4,16 @@
     <ion-nav-back-button>
     </ion-nav-back-button>
   <ion-nav-buttons side="right">              
-          <button class="itemButton button-border-a button button-icon ion-android-share-alt" ng-click="shareItem()" ng-if="!newItem"> </button>
+          <button class="itemButton button-border-a button button-icon ion-android-share-alt" ng-click="shareItem()" > </button>
     </ion-nav-buttons>
 </ion-nav-bar>
 
- <div class="friend-title" ng-click="goBack()">          
+<center>
+ <div class="friend-title">          
           <span class="friend-name">{{currentFriend.name}}</span>
           <img class="friend-name-img" ng-src="{{currentFriend.picture}}">
         </div>   
-
+</center>
  <div id="editFriendItemName" class="friend-item-name fixedElement">
    {{Item.name | limitTo: 50}} {{Item.name.length > 50 ? '&hellip;' : ''}}
   </div>

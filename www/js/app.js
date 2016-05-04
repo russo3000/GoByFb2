@@ -8,7 +8,8 @@ angular.module('starter', ['ionic', 'controllers', 'services','ngCordova'])
 .constant('config', {
     FBappIdProd: '1663498527242562',
     FBappIdSecret: '34acca6a5f91b6834b74941e71f1225d',
-    AWSIdentityPoolId: 'eu-west-1:f9c1658b-a4c9-4f5f-b3c9-eb1b264f96cf'
+    AWSIdentityPoolId: 'eu-west-1:f9c1658b-a4c9-4f5f-b3c9-eb1b264f96cf',
+    isOnline: false
 })
 
 .directive('elasticHeader', function($ionicScrollDelegate) {
@@ -80,18 +81,91 @@ angular.module('starter', ['ionic', 'controllers', 'services','ngCordova'])
       }
     }
   }
-}) 
+})
 
-.run(function($ionicPlatform, config) {
 
+.run(function($ionicPlatform, config, $cordovaNetwork, $rootScope) {
 
   $ionicPlatform.ready(function() 
-  {
+  {    
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
-    if(window.cordova && window.cordova.plugins.Keyboard) {
+    if(window.cordova && window.cordova.plugins.Keyboard) 
+    {
       cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+
+      if($cordovaNetwork.isOnline())
+      {
+        config.isOnline = true;        
+      }
+      else
+      {
+        config.isOnline = false;
+      }       
     }
+    else
+    {
+      if(navigator && navigator.onLine)
+      {
+        config.isOnline = true;  
+      }
+      else
+      {
+        config.isOnline = false;
+      }    
+    }
+
+    if(config.isOnline)
+      {
+        $rootScope.connectionStatus = "connected";      
+      }
+      else
+      {
+        $rootScope.connectionStatus = "not-connected";
+      }
+
+      startWatching($rootScope.showConnectionStatus);
+      $rootScope.showConnectionStatus($rootScope.connectionStatus);
+
+      function startWatching(callback)
+      {
+        //console.log("in start watching: " + $rootScope.connectionStatus);
+
+          if($rootScope.isMobile())
+          {
+            $rootScope.$on('$cordovaNetwork:online', function(event, networkState)
+            {            
+             // console.log("went online");
+              $rootScope.connectionStatus = "connected";
+              callback($rootScope.connectionStatus);
+            });
+
+            $rootScope.$on('$cordovaNetwork:offline', function(event, networkState)
+            {
+             // console.log("went offline");
+              $rootScope.connectionStatus = "not-connected";
+              callback($rootScope.connectionStatus);
+            });
+          }
+          else 
+          {
+            window.addEventListener("online", function(e) 
+            {
+            //  console.log("went online");
+              $rootScope.connectionStatus = "connected";
+              callback($rootScope.connectionStatus);
+            }, false);    
+
+            window.addEventListener("offline", function(e) 
+            {
+            //  console.log("went offline");
+              $rootScope.connectionStatus = "not-connected";
+              callback($rootScope.connectionStatus);;
+            }, false);  
+          }
+      } 
+
+
     if(window.StatusBar) 
     {
       StatusBar.styleDefault();
@@ -164,6 +238,19 @@ if(!ionic.Platform.isAndroid())
       {
         templateUrl: "views/friends.html",
         controller: 'FriendsCtrl'
+      },
+      cache: false
+    }
+  })
+  .state('app.categories', 
+  {
+    url: "/categories",
+    views: 
+    {
+      'menuContent': 
+      {
+        templateUrl: "views/categories.html",
+        controller: 'CategoriesCtrl'
       },
       cache: false
     }

@@ -272,6 +272,11 @@
 
 /* end scroller */
 
+.cat-spacer-header
+{
+  background-color: #f1f1f1;
+}
+
 #no-categories
 {
   width: 100%;
@@ -365,8 +370,7 @@
   position: relative;
   top: 3px;
   color: #fff;
-  text-align: right;
-  padding-right: 10px;
+width: 50%;
 }
 .friend-name-img
 {
@@ -619,10 +623,10 @@ float: left;
   position: relative; 
 }
 
- #button_home_main, #button_friends
+ #button_home_main, #button_friends, #button_side_menu
 {
   float: right;
-  width: 50%;
+  width: 33%;
   text-align: center;
 }
 
@@ -889,6 +893,12 @@ p.info {
 {
   height:50px; 
   background-color: #387ef5;
+}
+
+.header-buttons
+{
+  width: 200px;
+  text-align: right;
 }
 
 .category-items

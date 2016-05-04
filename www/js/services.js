@@ -18,7 +18,77 @@ angular.module('services', [])
     setUser: setUser
   };
 })
+.factory('ConnectivityMonitor', function($cordovaNetwork, $rootScope){
+  
+  function checkConnection()
+  {    
+    if($rootScope.isMobile())
+    {
+      if($cordovaNetwork.isOnline())
+      {
+        return true;  
+      }
+      else
+      {
+        return false;
+      }
+    }
+    else
+    {  
+      if(navigator && navigator.onLine)
+      {
+        return true;  
+      }
+      else
+      {
+        return false;
+      }
+    }
+  };
 
+  function startWatching(callback)
+  {
+    //console.log("in start watching: " + $rootScope.connectionStatus);
+
+      if($rootScope.isMobile())
+      {
+        $rootScope.$on('$cordovaNetwork:online', function(event, networkState)
+        {            
+         // console.log("went online");
+          $rootScope.connectionStatus = "connected";
+          callback($rootScope.connectionStatus);
+        });
+
+        $rootScope.$on('$cordovaNetwork:offline', function(event, networkState)
+        {
+         // console.log("went offline");
+          $rootScope.connectionStatus = "not-connected";
+          callback($rootScope.connectionStatus);
+        });
+      }
+      else 
+      {
+        window.addEventListener("online", function(e) 
+        {
+        //  console.log("went online");
+          $rootScope.connectionStatus = "connected";
+          callback($rootScope.connectionStatus);
+        }, false);    
+
+        window.addEventListener("offline", function(e) 
+        {
+        //  console.log("went offline");
+          $rootScope.connectionStatus = "not-connected";
+          callback($rootScope.connectionStatus);;
+        }, false);  
+      }
+  }
+
+  return {
+    startWatching: startWatching,
+    checkConnection: checkConnection
+  }
+}) 
 .factory('DbService', function(config, UserService, ConnectivityMonitor, $rootScope) 
 {
   
@@ -479,75 +549,4 @@ angular.module('services', [])
   }
 })
 
-.factory('ConnectivityMonitor', function($cordovaNetwork, $rootScope){
-
-  function checkConnection()
-  {
-    
-    if($rootScope.isMobile())
-    {
-      if($cordovaNetwork.isOnline())
-      {
-        return true;  
-      }
-      else
-      {
-        return false;
-      }
-    }
-    else
-    {  
-      if(navigator && navigator.onLine)
-      {
-        return true;  
-      }
-      else
-      {
-        return false;
-      }
-    }
-  };
-
-  function startWatching(callback)
-  {
-    //console.log("in start watching: " + $rootScope.connectionStatus);
-
-      if($rootScope.isMobile())
-      {
-        $rootScope.$on('$cordovaNetwork:online', function(event, networkState)
-        {            
-         // console.log("went online");
-          $rootScope.connectionStatus = "connected";
-          callback($rootScope.connectionStatus);
-        });
-
-        $rootScope.$on('$cordovaNetwork:offline', function(event, networkState)
-        {
-         // console.log("went offline");
-          $rootScope.connectionStatus = "not-connected";
-          callback($rootScope.connectionStatus);
-        });
-      }
-      else 
-      {
-        window.addEventListener("online", function(e) 
-        {
-        //  console.log("went online");
-          $rootScope.connectionStatus = "connected";
-          callback($rootScope.connectionStatus);
-        }, false);    
-
-        window.addEventListener("offline", function(e) 
-        {
-        //  console.log("went offline");
-          $rootScope.connectionStatus = "not-connected";
-          callback($rootScope.connectionStatus);;
-        }, false);  
-      }
-  }
-
-  return {
-    startWatching: startWatching,
-    checkConnection: checkConnection
-  }
-});
+;

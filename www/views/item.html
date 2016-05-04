@@ -6,12 +6,12 @@
     </ion-nav-back-button>
   <ion-nav-buttons side="right">
     
-    
-    <button class="itemButton button-border-a button button-icon ion-checkmark" ng-click="saveItem(true)" ng-if="newItem"></button>    
+    <div class="header-buttons">
+    <button class="itemButton button-border-a button button-icon ion-checkmark" ng-click="updateItemSelectedCategoryValues();saveItem(true)"></button>    
     <button class="itemButton button-border-a button button-icon ion-android-share-alt" ng-click="shareItem()" ng-if="!newItem"> </button>          
     <button id="choose-img-btn" class="itemButton button button-icon ion-images" ng-click="imageSelection()"> </button>
     <button class="itemButton button-border-b button button-icon ion-trash-b" ng-click="deleteItem()" ng-if="!newItem"> </button> 
-
+</div>
 
   </ion-nav-buttons>
 </ion-nav-bar>
@@ -162,7 +162,7 @@
           <div class="cat-spacer">&nbsp;</div>
             <div class="max-width categories-header"> 
               <div class="button-icon ion-pricetags left"> Categories: </div>         
-              <div class="button-icon ion-arrow-move right" ng-click="data.showDelete = false; data.showReorder = !data.showReorder; toggleCategories();"></div>
+              <!--<div class="button-icon ion-arrow-move right" ng-click="data.showDelete = false; data.showReorder = !data.showReorder; toggleCategories();"></div>-->
               <div id="category_btn" class="button-icon ion-plus-circled right" ng-click="addNewCategory()" ></div>
               <div id="categoryRequired" class="left">
               * Please select atleast one category
