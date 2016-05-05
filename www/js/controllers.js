@@ -1,6 +1,6 @@
 angular.module('controllers', [])
 
-.controller('WelcomeCtrl', function($rootScope, $scope, $state, $q, $window, $timeout, $ionicActionSheet, $cordovaToast, $ionicLoading, config, UserService, DbService, ConnectivityMonitor) 
+.controller('WelcomeCtrl', function($rootScope, $scope, $state, $q, $window, $timeout, $ionicActionSheet, $cordovaToast, $ionicLoading, config, UserService, DbService, ConnectivityMonitor, $translate) 
 {
   var max = 41;
   var min = 0;
@@ -411,6 +411,13 @@ $rootScope.GotFriend = function(connected, friend)
     $rootScope.notifications = 0;
     $rootScope.user = UserService.getUser();
 
+    //apply translation
+    console.log("in welcome");
+    console.log($rootScope.user.language);
+    $translate.use($rootScope.user.language);
+
+    
+
     if(ok)
     {
       $rootScope.connectionStatus = "connected";
@@ -596,7 +603,12 @@ $rootScope.GotFriend = function(connected, friend)
 })
 
 //Side Menu functionality goes here
-.controller('AppCtrl', function($rootScope, $scope, UserService, $state, $ionicLoading, $ionicHistory){  
+.controller('AppCtrl', function($rootScope, $scope, UserService, $state, $ionicLoading, $ionicHistory, $translate, DbService){  
+
+
+  $rootScope.user = UserService.getUser();
+
+
 
   $scope.goHome = function()
   {
@@ -611,6 +623,18 @@ $rootScope.GotFriend = function(connected, friend)
   {          
     var isWebView = ionic.Platform.isWebView();
     return isWebView;
+  }
+
+  $scope.languageChanged = function()
+  {    
+    $rootScope.user.language = $scope.user.language;
+
+    console.log($rootScope.user.language);
+    
+    $translate.use($rootScope.user.language);
+    
+    $rootScope.showToast('Saving');
+    DbService.Store($rootScope.user, null);
   }
 
   $scope.logOut = function() 

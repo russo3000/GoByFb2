@@ -122,6 +122,15 @@
   text-align: center;  
 }
 
+#language
+{
+  font-size: 16px;
+  width: 100%;
+  background-color: #fff;
+  border: 0px;
+  margin-left: -7px;
+}
+
 /* Scrollers iScroller */
 #wrapperV {
     position:relative; z-index:1;
@@ -370,7 +379,7 @@
   position: relative;
   top: 3px;
   color: #fff;
-width: 50%;
+width: 50%; 
 }
 .friend-name-img
 {

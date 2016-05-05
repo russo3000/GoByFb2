@@ -3,7 +3,7 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-angular.module('starter', ['ionic', 'controllers', 'services','ngCordova'])
+angular.module('starter', ['ionic', 'controllers', 'services','ngCordova','pascalprecht.translate'])
 
 .constant('config', {
     FBappIdProd: '1663498527242562',
@@ -197,7 +197,27 @@ if(!ionic.Platform.isAndroid())
 
 })
 
-.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, $compileProvider) {
+.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, $compileProvider, $translateProvider) {
+
+var userObject = JSON.parse(window.localStorage.GoByData || '{}');
+
+var translationsEN = {
+            home: "Home",
+            edit_categories: "Edit Categories",
+            add_a_place: "Add a place"            
+        };
+ 
+var translationsSP= {
+            home: "Pagina Principal",
+            edit_categories: "Editar Categorias",
+            add_a_place: "Añadir un lugar"            
+        };
+
+  $translateProvider.translations('en', translationsEN);
+  $translateProvider.translations('sp', translationsSP);
+
+  $translateProvider.preferredLanguage(userObject.language);
+  $translateProvider.fallbackLanguage("en");
 
   $ionicConfigProvider.views.maxCache(0);
 

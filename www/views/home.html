@@ -17,7 +17,7 @@
 <div id="editItemNameHome" class="item-input-inset">
   <label class="item-input-wrapper"> 
     <i class="icon ion-plus-circled placeholder-icon"></i>
-    <input type="text" id="itemDataNameHome"  ng-model="itemData.name" placeholder="Add a place" searchKey="TEST">
+    <input type="text" id="itemDataNameHome"  ng-model="itemData.name" placeholder="{{'add_a_place' | translate}}" searchKey="TEST">
   </label>
   <button style="position:absolute; right:15px; top:13px; color:#0c60ee; font-weight:bold" class="icon ion-arrow-right-a" ng-click="addNewItem()" ng-if="user.categories.length > 0"></button>
   <!--

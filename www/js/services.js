@@ -156,6 +156,11 @@ angular.module('services', [])
                 Action: 'PUT',
                 Value: {S: userObject.picture}
               },
+              Language: 
+              {
+                Action: 'PUT',
+                Value: {S: userObject.language}
+              },
               FriendsWhoAlsoUseTheAppIds: 
               {
                 Action: 'PUT',
@@ -229,9 +234,10 @@ angular.module('services', [])
 
     $rootScope.user.user_id = profileInfo.id;
     $rootScope.user.name = profileInfo.name;
-    $rootScope.user.email = profileInfo.email;
+    $rootScope.user.email = profileInfo.email;    
     $rootScope.user.picture = "http://graph.facebook.com/" + profileInfo.id + "/picture?type=large";
     $rootScope.user.friends_who_also_use_the_app_ids = friends_who_also_use_the_app_ids;
+
 
     if(typeof $rootScope.user.friends == "undefined")
     {
@@ -288,7 +294,7 @@ angular.module('services', [])
         var readparams = 
         {
           Key: { FbId: {S: userObject.user_id} },            
-          AttributesToGet: ['FbId','Name','Email','Picture','FriendsWhoAlsoUseTheAppIds','Categories','TimeStamp'],
+          AttributesToGet: ['FbId','Name','Email','Picture','Language','FriendsWhoAlsoUseTheAppIds','Categories','TimeStamp'],
           TableName: 'GoBy'
         };
         
@@ -333,6 +339,7 @@ angular.module('services', [])
                   name: AWSUserObj.Item.Name.S,
                   email: AWSUserObj.Item.Email.S,
                   picture: AWSUserObj.Item.Picture.S,
+                  language: AWSUserObj.Item.Language.S,
                   friends_who_also_use_the_app_ids: AWSUserObj.Item.FriendsWhoAlsoUseTheAppIds.S,
                   categories: JSON.parse(AWSUserObj.Item.Categories.S),        
                   time_stamp: AWSUserObj.Item.TimeStamp.S
@@ -386,7 +393,7 @@ angular.module('services', [])
         var readparams = 
         {
           Key: { FbId: {S: userObject.user_id} },
-          AttributesToGet: ['FbId','Name','Email','Picture','FriendsWhoAlsoUseTheAppIds','Categories','TimeStamp'],
+          AttributesToGet: ['FbId','Name','Email','Picture','Language','FriendsWhoAlsoUseTheAppIds','Categories','TimeStamp'],
           TableName: 'GoBy'
         };
         
@@ -429,6 +436,7 @@ angular.module('services', [])
                   name: AWSUserObj.Item.Name.S,
                   email: AWSUserObj.Item.Email.S,
                   picture: AWSUserObj.Item.Picture.S,
+                  language: AWSUserObj.Item.Language.S,
                   friends_who_also_use_the_app_ids: AWSUserObj.Item.FriendsWhoAlsoUseTheAppIds.S,
                   categories: JSON.parse(AWSUserObj.Item.Categories.S),        
                   time_stamp: AWSUserObj.Item.TimeStamp.S
@@ -485,7 +493,7 @@ angular.module('services', [])
         var readparams = 
         {
           Key: { FbId: {S: friendId} },
-          AttributesToGet: ['FbId','Name','Email','Picture','FriendsWhoAlsoUseTheAppIds','Categories','TimeStamp'],
+          AttributesToGet: ['FbId','Name','Email','Picture','Language','FriendsWhoAlsoUseTheAppIds','Categories','TimeStamp'],
           TableName: 'GoBy'
         };
         
@@ -518,6 +526,7 @@ angular.module('services', [])
                   name: AWSUserObj.Item.Name.S,
                   email: AWSUserObj.Item.Email.S,
                   picture: AWSUserObj.Item.Picture.S,
+                  language: AWSUserObj.Item.Language.S,
                   friends_who_also_use_the_app_ids: AWSUserObj.Item.FriendsWhoAlsoUseTheAppIds.S,
                   categories: JSON.parse(AWSUserObj.Item.Categories.S),        
                   time_stamp: AWSUserObj.Item.TimeStamp.S
