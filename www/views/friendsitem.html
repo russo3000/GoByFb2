@@ -9,9 +9,9 @@
 </ion-nav-bar>
 
 <center>
- <div class="friend-title">          
-          <span class="friend-name">{{currentFriend.name}}</span>
+ <div class="friend-title">                    
           <img class="friend-name-img" ng-src="{{currentFriend.picture}}">
+          <span class="friend-name">{{currentFriend.name}}</span>
         </div>   
 </center>
  <div id="editFriendItemName" class="friend-item-name fixedElement">
@@ -45,14 +45,14 @@
               <i class="icon ion-ios-bookmarks-outline"></i>
                 <div class="item-text">
                   {{Item.notes}}
-                  <i class="temporary" ng-if="!Item.notes">{{currentFriend.name}}'s Notes</i>    
+                  <i class="temporary" ng-if="!Item.notes">{{currentFriend.name}}{{'s_notes' | translate}}</i>    
                 </div>
             </ion-item>
             <ion-item class="item item-text-wrap item-icon-left item-icon-right item-remove-animate">
               <i class="icon ion-ios-location-outline"></i>
                 <div ng-click="goToMap()">
                   {{Item.formatted_address}}
-                  <i class="temporary-address" ng-if="!Item.formatted_address">Address</i>                  
+                  <i class="temporary-address" ng-if="!Item.formatted_address">{{'address' | translate}}</i>                  
                 </div>
             </ion-item>
           </div>
@@ -61,22 +61,22 @@
               <i class="icon ion-ios-telephone-outline"></i>
                 <div class="item-text">
                   {{Item.international_phone_number}}
-                  <i class="temporary" ng-if="!Item.international_phone_number">Phone Number</i>                  
+                  <i class="temporary" ng-if="!Item.international_phone_number">{{'phone_number' | translate}}</i>                  
                 </div>
             </ion-item>
             <ion-item class="item item-text-wrap item-icon-left item-icon-right item-remove-animate">          
               <i class="icon ion-link"></i>
                 <div class="item-text">
                   {{Item.website}}
-                  <i class="temporary" ng-if="!Item.website">Website</i>
+                  <i class="temporary" ng-if="!Item.website">{{'website' | translate}}</i>
                 </div>
             </ion-item>          
           </div>
           <div id="time" class="hidden">
             <a class="item item-icon-left" href="#" ng-if="Item.opening_hours">
               <i class="icon ion-clock"></i>
-              <div ng-if="Item.opening_hours.open_now" style="color:green">Open Now</div>
-              <div ng-if="!Item.opening_hours.open_now" style="color:red">Closed Now</div>
+              <div ng-if="Item.opening_hours.open_now" style="color:green">{{'open_now' | translate}}</div>
+              <div ng-if="!Item.opening_hours.open_now" style="color:red">{{'closed_now' | translate}}</div>
             </a>
             <a ng-repeat="opening_hour in Item.opening_hours.weekday_text track by $index" class="item item-icon-right" href="#">         
                 <div>{{opening_hour}}</div>
@@ -91,7 +91,7 @@
          <ion-item class="ion-text-wrap" id="item-categories" style="display:block;">
           <div class="cat-spacer">&nbsp;</div>
             <div class="max-width categories-header"> 
-              <div class="button-icon ion-pricetags left"> Categories: </div>                       
+              <div class="button-icon ion-pricetags left"> {{'categories' | translate}}: </div>                       
             </div>        
             <ion-list show-delete="data.showDelete" show-reorder="data.showReorder" class="max-width left">     
               <ion-item ng-repeat="category in currentFriend.categories track by $index" item="category" class="item-remove-animate">          

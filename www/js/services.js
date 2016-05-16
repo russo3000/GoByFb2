@@ -115,7 +115,7 @@ angular.module('services', [])
       });
          
 
-        // console.log("AWS.config.accessToken: " +AWS.config.accessToken);
+     //console.log("AWS.config.accessToken: " +AWS.config.accessToken);
 
       AWS.config.credentials.get(function(err) 
       {
@@ -132,6 +132,7 @@ angular.module('services', [])
 
         //Update the Table
         //update the table with this data
+       // console.log(userObject);        
 
           var params = 
           {
@@ -189,7 +190,7 @@ angular.module('services', [])
           {
             var ddb = new AWS.DynamoDB({dynamoDbCrc32: false});
 
-           // console.log(params);
+          //  console.log(params);
 
             ddb.updateItem(params, function(err, data) 
             {
@@ -258,9 +259,6 @@ angular.module('services', [])
 
       //Initialize the Amazon Cognito credentials provider
       AWS.config.accessToken = longTermFBAccessToken;
-
-
-
       AWS.config.region = 'eu-west-1'; // Region
       AWS.config.credentials = new AWS.CognitoIdentityCredentials(
       {
@@ -276,7 +274,7 @@ angular.module('services', [])
       {
         //console.log("AWS.config.credentials");
         //console.log(AWS.config.credentials);
-        //alert('getting data 1');
+        
 
         if(err) 
         { 
@@ -323,6 +321,7 @@ angular.module('services', [])
               //console.log("User doesn't exist in db, going to create it");
               $rootScope.user.categories = [];
               $rootScope.user.time_stamp = -1;
+              $rootScope.user.language = $rootScope.language.split('-')[0];
 
               Store($rootScope.user, callback);
             }
@@ -361,9 +360,7 @@ angular.module('services', [])
   };
 
   function ReloadData (callback)
-  {  
-    
-
+  {      
     if(ConnectivityMonitor.checkConnection() && $rootScope.connectionStatus != "not-connected")
     {
       AWS.config.region = 'eu-west-1'; // Region
@@ -461,9 +458,7 @@ angular.module('services', [])
 
   
   function getFriend (friendId, callback)
-  {  
-    
-
+  {      
     if(ConnectivityMonitor.checkConnection() && $rootScope.connectionStatus != "not-connected")
     {
       AWS.config.region = 'eu-west-1'; // Region

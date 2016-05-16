@@ -4,41 +4,22 @@
       <ion-nav-back-button>
       </ion-nav-back-button>
       
-      <ion-nav-buttons side="right">
-       <!-- New Item button 
-        <div id="home-search-btn" class="right">
-          <button  class="button button-icon ion-arrow-right-c" ng-click="addNewItem()" ng-if="user.categories.length > 0"> </button>
-        </div>
-        -->        
-                
+      <ion-nav-buttons side="right">                       
       </ion-nav-buttons>
 </ion-nav-bar>
-
+<!--
 <div id="editItemNameHome" class="item-input-inset">
   <label class="item-input-wrapper"> 
     <i class="icon ion-plus-circled placeholder-icon"></i>
     <input type="text" id="itemDataNameHome"  ng-model="itemData.name" placeholder="{{'add_a_place' | translate}}" searchKey="TEST">
   </label>
-  <button style="position:absolute; right:15px; top:13px; color:#0c60ee; font-weight:bold" class="icon ion-arrow-right-a" ng-click="addNewItem()" ng-if="user.categories.length > 0"></button>
-  <!--
-<i style="color:#0c60ee; font-weight:bold" class="icon ion-arrow-right-a" ng-click="addNewItem()" ng-if="user.categories.length > 0"></i>
-<i style="color:#0c60ee; font-weight:bold" class="icon ion-arrow-right-b" ng-click="addNewItem()" ng-if="user.categories.length > 0"></i>
-<i style="color:#0c60ee; font-weight:bold" class="icon ion-arrow-right-c" ng-click="addNewItem()" ng-if="user.categories.length > 0"></i>
-<i style="color:#0c60ee; font-weight:bold" class="icon ion-chevron-right" ng-click="addNewItem()" ng-if="user.categories.length > 0"></i>
-<i style="color:#0c60ee; font-weight:bold" class="icon ion-play" ng-click="addNewItem()" ng-if="user.categories.length > 0"></i> 
-<i style="color:#0c60ee; font-weight:bold" class="icon ion-ios-arrow-right" ng-click="addNewItem()" ng-if="user.categories.length > 0"></i>
-<i style="color:#0c60ee; font-weight:bold" class="icon ion-ios-play" ng-click="addNewItem()" ng-if="user.categories.length > 0"></i>
-<i style="color:#0c60ee; font-weight:bold" class="icon ion-ios-play-outline" ng-click="addNewItem()" ng-if="user.categories.length > 0"></i>
-<i style="color:#0c60ee; font-weight:bold" class="icon ion-android-arrow-forward" ng-click="addNewItem()" ng-if="user.categories.length > 0"></i>
-<i style="color:#0c60ee; font-weight:bold" class="icon ion-android-arrow-dropright" ng-click="addNewItem()" ng-if="user.categories.length > 0"></i>
-<i style="color:#0c60ee; font-weight:bold" class="icon ion-android-arrow-dropright-circle" ng-click="addNewItem()" ng-if="user.categories.length > 0"></i>
--->
-
-
+  
+ 
 
 </div>
+-->
 
-  <div class="bar bar-subheader item-input-inset bar-stable">    
+  <div class="bar tem-input-inset bar-positive">    
         <div class="mainHeader"> 
           <!-- Disable the left menu for now
           <div id="button_side_menu">                     
@@ -58,7 +39,7 @@
         </div> 
   </div>
 
-  <ion-content class="has-subheader padding" style="top:65px !important" delegate-handle="mainScroll">
+  <ion-content class="padding" delegate-handle="mainScroll">
 
     <ion-refresher on-refresh="doRefresh()"></ion-refresher>
 
@@ -66,14 +47,14 @@
 
       
         <div id="not-connected" class="bar bar-assertive" ng-click="notConnected()">
-          <div class="connection-status-text">Working Offline</div>
+          <div class="connection-status-text">{{'working_offline' | translate}}</div>
         </div>
         
         <div id="connected"  class="bar bar-balanced" ng-click="connected()">
-          <div class="connection-status-text">Working Online</div>
+          <div class="connection-status-text">{{'working_online' | translate}}</div>
         </div>
         <div id="connecting" class="bar bar-balanced" ng-click="connecting()">
-          <div class="connection-status-text"><div class="connecting">Connecting <img src="img/loading.gif" height="20px" class="loading" ></div> </div>
+          <div class="connection-status-text"><div class="connecting">{{'connecting' | translate}} <img src="img/loading.gif" height="20px" class="loading" ></div> </div>
         </div>
       
     
@@ -81,9 +62,9 @@
 
 
 <div id="home_main">
-    <div id="wrapperV">
+    <div id="wrapperV" >
         <div id="scrollerV" >
-          <ul id="scrollerList">
+          <ul id="scrollerList">            
             <li ng-repeat="category in user.categories | filter:categoryHasVisibleItems track by $index" >                  
               <div  class="item-input">
                 <div class="category-wrapper">
@@ -112,17 +93,31 @@
                       </div>
                     </li>
                     <li>
-                      <div class="photo"><button class="button button-icon ion-plus-circled" id="current_category_{{category.id}}" current-category-id="{{category.id}}" ng-click="addNewItem('current_category_{{category.id}}')"  > Add a new item to this category</button>
+                      <div class="photo"><button class="button button-icon ion-plus-circled" id="current_category_{{category.id}}" current-category-id="{{category.id}}" ng-click="addNewItem('current_category_{{category.id}}')"  > {{'add_a_new_item_to_this_category' | translate}}</button>
                       </div>
                     </li>                    
                   </ul>
                 </div>
               </div>
             </li>
-            <li>
-              <div id="no-categories">
-                  <button class="button button-icon ion-plus-circled" ng-click="addNewCategory()" > Add a new category</button>
+
+
+            <li id="add-a-new-item-li-0" ng-if="user.categories.length == 0">
+              <div id="add-a-new-item" ng-click="addNewItem()">    
+                <p class="add-a-new-item">
+                  {{'add_a_new_item' | translate}}
+                </p>        
               </div>
+            </li>
+
+            <li id="add-a-new-item-li" ng-if="user.categories.length > 0">
+            
+              <div id="add-a-new-item" ng-click="addNewItem()">    
+                <p class="add-a-new-item">
+                  {{'add_a_new_item' | translate}}
+                </p>        
+              </div>
+              
             </li>
           </ul>
         </div>
@@ -136,7 +131,7 @@
           <img ng-src="{{friend.picture}}">
           <h2>{{friend.name}}</h2>
           <span class="badge badge-assertive" ng-if="friend.notified">1</span>
-          <p><b>Categories:</b> {{friend.category_names}}</p>
+          <p><b>{{'categories' | translate}}:</b> {{friend.category_names}}</p>
         </a>
     </div>
 </div>

@@ -7,7 +7,7 @@
   <ion-nav-buttons side="right">
     
     <div class="header-buttons">
-    <button class="itemButton button-border-a button button-icon ion-checkmark" ng-click="updateItemSelectedCategoryValues();saveItem(true)"></button>    
+    <button class="itemButton button-border-a button button-icon ion-checkmark" ng-click="saveItem(true)"></button>    
     <button class="itemButton button-border-a button button-icon ion-android-share-alt" ng-click="shareItem()" ng-if="!newItem"> </button>          
     <button id="choose-img-btn" class="itemButton button button-icon ion-images" ng-click="imageSelection()"> </button>
     <button class="itemButton button-border-b button button-icon ion-trash-b" ng-click="deleteItem()" ng-if="!newItem"> </button> 
@@ -28,8 +28,8 @@
 
    <div id="itemImageSelection">   
             <div id="itemImageSelectionMenu">
-              <button class="ItemCameraButton button button-icon ion-camera" ng-click="takePhoto()" > Photo</button>
-              <button class="ItemCameraButton button button-icon ion-images" ng-click="showGallery()" > My Gallery</button>
+              <button class="ItemCameraButton button button-icon ion-camera" ng-click="takePhoto()" > {{'photo' | translate}}</button>
+              <button class="ItemCameraButton button button-icon ion-images" ng-click="showGallery()" > {{'my_gallery' | translate}}</button>
               <div id="itemImageSelectionClose">
                 <button class="button-icon ion-ios-close-outline" ng-click="cancelImageSelection()" ></button>  
               </div>
@@ -51,9 +51,9 @@
 
         <div id="example-elastic-header" >          
           <div class="add-images" ng-if="Item.images.length == 0">
-            <h1>Add an Image</h1>
-            <button class="ItemCameraButton button button-icon ion-camera" ng-click="takePhoto()" > Photo</button>
-            <button class="ItemCameraButton button button-icon ion-images" ng-click="showGallery()" > My Gallery</button>
+            <h1>{{'add_an_image' | translate}}</h1>
+            <button class="ItemCameraButton button button-icon ion-camera" ng-click="takePhoto()" >{{'photo' | translate}}</button>
+            <button class="ItemCameraButton button button-icon ion-images" ng-click="showGallery()" > {{'my_gallery' | translate}}</button>
           </div>
           <div id="default-image" class="thumbnail_big" ng-if="Item.images.length > 0" style="width:414px" ng-click="goToSlide()">
             <!--<img ng-src="{{Item.default_image.image_name}}" class="portrait" style="width:414px" ng-click="goToSlide()">-->
@@ -87,14 +87,14 @@
 
  <div class="bar item-input-inset bar-light connection-status">
         <div id="not-connected" class="bar bar-assertive" ng-click="notConnected()">
-          <div class="connection-status-text">Working Offline</div>
+          <div class="connection-status-text">{{'working_offline' | translate}}</div>
         </div>        
         <div id="connected"  class="bar bar-balanced" ng-click="connected()">
-          <div class="connection-status-text">Working Online</div>
+          <div class="connection-status-text">{{'working_online' | translate}}</div>
         </div>
         <div id="connecting" class="bar bar-balanced" ng-click="connecting()">
           <div class="connection-status-text">
-            <div class="connecting">Connecting <img src="img/loading.gif" height="20px" class="loading" ></div> 
+            <div class="connecting">{{'connecting' | translate}} <img src="img/loading.gif" height="20px" class="loading" ></div> 
           </div>
         </div>
     </div>
@@ -105,14 +105,14 @@
               <i class="icon ion-ios-bookmarks-outline"></i>
                 <div class="item-text" ng-click="editItems('notes')">
                   {{Item.notes}}
-                  <i class="temporary" ng-if="!Item.notes">My Notes</i>    
+                  <i class="temporary" ng-if="!Item.notes">{{'my_notes' | translate}}</i>    
                 </div>
             </ion-item>
             <ion-item class="item item-text-wrap item-icon-left item-icon-right item-remove-animate">
               <i class="icon ion-ios-location-outline"></i>
                 <div class="item-text-address" ng-click="goToMap()">
                   {{Item.formatted_address}}
-                  <i class="temporary-address" ng-if="!Item.formatted_address">Address</i>
+                  <i class="temporary-address" ng-if="!Item.formatted_address">{{'address' | translate}}</i>
                   <div class="right-slide"><i class="ion-icon calm ion-arrow-left-a"></i> <i class="ion-icon calm ion-edit"></i></div>
                 </div>
               <ion-option-button class="button-positive ion-edit option-border-a" ng-click="editItems('formatted_address')"></ion-option-button>
@@ -123,7 +123,7 @@
               <i class="icon ion-ios-telephone-outline"></i>
                 <div class="item-text" ng-click="editItems('international_phone_number')">
                   {{Item.international_phone_number}}
-                  <i class="temporary" ng-if="!Item.international_phone_number">Phone Number</i>
+                  <i class="temporary" ng-if="!Item.international_phone_number">{{'phone_number' | translate}}</i>
                   
                 </div>
             </ion-item>
@@ -131,15 +131,15 @@
               <i class="icon ion-link"></i>
                 <div class="item-text" ng-click="editItems('website')">
                   {{Item.website}}
-                  <i class="temporary" ng-if="!Item.website">Website</i>
+                  <i class="temporary" ng-if="!Item.website">{{'website' | translate}}</i>
                 </div>
             </ion-item>          
           </div>
           <div id="time" class="hidden">
             <a class="item item-icon-left" href="#" ng-if="Item.opening_hours">
               <i class="icon ion-clock"></i>
-              <div ng-if="Item.opening_hours.open_now" style="color:green">Open Now</div>
-              <div ng-if="!Item.opening_hours.open_now" style="color:red">Closed Now</div>
+              <div ng-if="Item.opening_hours.open_now" style="color:green">{{'open_now' | translate}}</div>
+              <div ng-if="!Item.opening_hours.open_now" style="color:red">{{'closed_now' | translate}}</div>
             </a>
             <a ng-repeat="opening_hour in Item.opening_hours.weekday_text track by $index" class="item item-icon-right" href="#">         
                 <div>{{opening_hour}}</div>
@@ -151,21 +151,20 @@
         <div class="cat-spacer">&nbsp;</div>
         
           <ion-toggle ng-model="Item.is_public" ng-checked="Item.is_public" toggle-class="toggle-balanced"  ng-change="makePrivate()" style="height:70px">
-                     Visibility: <b><span ng-if="Item.is_public"  style="color:#33cd5f;">Public</span><span ng-if="!Item.is_public" style="color:#ef473a;">Private</span></b> 
-                     <span id="can-see" ng-if="Item.is_public">(My Friends <b style="color:#33cd5f;">can</b> see this Item)</span>
-                     <span id="can-not-see" ng-if="!Item.is_public">(My Friends <b style="color:#ef473a;">can't</b> see this Item)</span>
+                     {{'visibility' | translate}}: <b><span ng-if="Item.is_public"  style="color:#33cd5f;">{{'public' | translate}}</span><span ng-if="!Item.is_public" style="color:#ef473a;">{{'private' | translate}}</span></b> 
+                     <span id="can-see" ng-if="Item.is_public">({{'my_friends' | translate}} <b style="color:#33cd5f;">{{'can' | translate}}</b> {{'see_this_item' | translate}})</span>
+                     <span id="can-not-see" ng-if="!Item.is_public">({{'my_friends' | translate}} <b style="color:#ef473a;">{{'cant' | translate}}</b> {{'see_this_item' | translate}})</span>
             </ion-toggle>
         
 
-
-        <ion-item class="ion-text-wrap" id="item-categories" style="display:block;">
+        <ion-item class="ion-text-wrap" id="item-categories" style="display:block;"  ng-if="user.categories.length > 0" >
           <div class="cat-spacer">&nbsp;</div>
             <div class="max-width categories-header"> 
-              <div class="button-icon ion-pricetags left"> Categories: </div>         
+              <div class="button-icon ion-pricetags left"> {{'categories' | translate}}: </div>         
               <!--<div class="button-icon ion-arrow-move right" ng-click="data.showDelete = false; data.showReorder = !data.showReorder; toggleCategories();"></div>-->
               <div id="category_btn" class="button-icon ion-plus-circled right" ng-click="addNewCategory()" ></div>
               <div id="categoryRequired" class="left">
-              * Please select atleast one category
+              * {{'please_select_atleast_one_category' | translate}}
               </div>
             </div>        
             <ion-list show-delete="data.showDelete" show-reorder="data.showReorder" class="max-width left">     
@@ -183,6 +182,17 @@
          
          </ion-item>
             <div class="cat-spacer">&nbsp;</div>
+
+            <ion-item  ng-if="user.categories.length == 0"> 
+          <div id="add-a-category" >
+          
+            <div class="add-a-category" ng-click="addNewCategory()" >
+            {{'add_a_category' | translate}}
+            </div>
+            </div>
+       
+        </ion-item>
+        <div class="cat-spacer" ng-if="user.categories.length == 0">&nbsp;</div>
 
               <ul>
                 <li ng-repeat="image in Item.images track by $index " id="li_image_{{$index}}" ng-click="goToSlide()">

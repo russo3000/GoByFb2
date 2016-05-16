@@ -7,11 +7,11 @@
     <ion-content>
       <ion-list>
         <ion-item class="profile">
-          <div class="user" ng-style="{'background-image':'url('+user.picture+')'}" ng-click="goHome();toogleSidemenu();" menu-close></div>
+          <div class="user" ng-style="{'background-image':'url('+user.picture+')'}" ng-click="toogleSidemenu();" menu-close></div>
         </ion-item>
 
 
-        <ion-item menu-close class="item item-text-wrap item-icon-left" href="#/app/home" ng-click="goHome();toogleSidemenu();">
+        <ion-item menu-close class="item item-text-wrap item-icon-left" href="#/app/home" ng-click="toogleSidemenu();">
           <i class="icon ion-ios-home"></i>
           <div class="item-text-side-menu" >{{"home" | translate}} </div>
         </ion-item>
@@ -28,15 +28,16 @@
           <i class="icon ion-ios-world"></i>
 
             <select id="language" name="language" ng-model="user.language" ng-change="languageChanged()">
-              <option value="en">English</option>
-              <option value="fr">French</option>
-              <option value="sp">Spanish</option>
-              <option value="ru">Russian</option>
-              <option value="de">German</option>
-              <option value="ch">Chinese</option>
-              <option value="ar">Arabic</option>
-              <option value="pt">Portuguese</option>
-              <option value="jp">Japanese</option>
+              <option value="en">{{"english" | translate}}</option>
+              <option value="fr">{{"french" | translate}}</option>
+              <option value="es">{{"spanish" | translate}}</option>
+              <option value="ru">{{"russian" | translate}}</option>
+              <option value="de">{{"german" | translate}}</option>
+              <option value="zh">{{"chinese" | translate}}</option>
+              <option value="ar">{{"arabic" | translate}}</option>
+              <option value="pt">{{"portuguese" | translate}}</option>
+              <option value="ja">{{"japanese" | translate}}</option>
+              <option value="af">{{"afrikaans" | translate}}</option>
             </select>
 
         </ion-item>
@@ -61,7 +62,7 @@
       </ion-list>
     </ion-content>
       <ion-footer-bar class="bar-assertive">
-        <ion-item menu-close  class="logout"  ng-click="logOut()">Logout</ion-item>
+        <ion-item menu-close  class="logout"  ng-click="logOut()">{{'logout' | translate}}</ion-item>
       </ion-footer-bar>
   </ion-side-menu>
 </ion-side-menus>

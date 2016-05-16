@@ -6,7 +6,7 @@
       </ion-nav-back-button>
 
       <ion-nav-buttons side="left">      
-      <button class="button button-icon ion-pricetags" menu-toggle="right"> Categories:</button>  
+      <button class="button button-icon ion-pricetags" menu-toggle="right"> {{"categories" | translate}}:</button>  
       </ion-nav-buttons>
 
       <ion-nav-buttons side="right">   
@@ -19,7 +19,7 @@
     </ion-nav-bar>
   <ion-content class="padding" delegate-handle="mainScroll">
     <div class="cat-spacer-header">
-      <div class="button-icon ion-navicon right" ng-click="data.showDelete = false; data.showReorder = !data.showReorder; toggleCategories();"> Reorder</div>
+      <div class="button-icon ion-navicon right" ng-click="data.showDelete = false; data.showReorder = !data.showReorder; toggleCategories();"> {{"reorder" | translate}}</div>
       <!--<div id="category_btn" class="button-icon ion-plus-circled right" ng-click="addNewCategory()" ></div>-->
     </div>
             <ion-list show-delete="data.showDelete" show-reorder="data.showReorder" class="max-width left">     

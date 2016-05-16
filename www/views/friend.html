@@ -14,9 +14,9 @@
     </ion-nav-bar>
 
     <center>
-    <div class="friend-title">          
-          <span class="friend-name">{{currentFriend.name}}</span>
+    <div class="friend-title">                    
           <img class="friend-name-img" ng-src="{{currentFriend.picture}}">
+          <span class="friend-name">{{currentFriend.name}}</span>
         </div>       
     </center>
   <ion-content class="padding" delegate-handle="mainScroll">
@@ -52,7 +52,7 @@
                       </div>
                     </li>
                     <li ng-if="category.items.length == 0">
-                      <div class="photo"><button class="button button-icon ion-android-alert" > This category doesn't have any items yet.</button>
+                      <div class="photo"><button class="button button-icon ion-android-alert" > {{'this_category_doesnt_have_any_items_yet' | translate}}.</button>
                       </div>
                     </li>                    
                   </ul>
@@ -65,7 +65,7 @@
       </div>
 
       <div id="AllCategoriesPrivate" ng-if="AllCategoriesPrivate">
-        There are no available categories
+        {{'there_are_no_available_categories' | translate}}
       </div>
 
 

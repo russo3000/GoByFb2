@@ -20,7 +20,7 @@
           <img ng-src="{{friend.picture}}">
           <h2>{{friend.name}}</h2>
           <span class="badge badge-assertive" ng-if="friend.notified">1</span>
-          <p><b>Categories:</b> {{friend.category_names}}</p>
+          <p><b>{{'categories' | translate}}:</b> {{friend.category_names}}</p>
         </a>
     </div>
   </ion-content>

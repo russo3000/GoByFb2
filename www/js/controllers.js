@@ -1,6 +1,6 @@
 angular.module('controllers', [])
 
-.controller('WelcomeCtrl', function($rootScope, $scope, $state, $q, $window, $timeout, $ionicActionSheet, $cordovaToast, $ionicLoading, config, UserService, DbService, ConnectivityMonitor, $translate) 
+.controller('WelcomeCtrl', function($rootScope, $scope, $state, $q, $window, $timeout, $ionicActionSheet, $cordovaToast, $ionicLoading, config, UserService, DbService, ConnectivityMonitor, $translate, $ionicPlatform) 
 {
   var max = 41;
   var min = 0;
@@ -9,6 +9,24 @@ angular.module('controllers', [])
   $rootScope.newItemFromHome = null;
   $rootScope.show_friends = false;
 
+  $ionicPlatform.ready(function() 
+  {   
+    // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
+    // for form inputs)
+    if(window.cordova && window.cordova.plugins.Keyboard) 
+    {
+      var setUserLanguage = function(lang) { $rootScope.language = lang.value.toLowerCase(); }
+      var setUserLanguageError = function(err) { alert(err); }
+
+      navigator.globalization.getPreferredLanguage(setUserLanguage, setUserLanguageError);          
+    }
+    else
+    {      
+      $rootScope.language = window.navigator.language.toLowerCase();            
+    }  
+
+    $translate.use($rootScope.language);  
+  });
 
   $rootScope.isMobile = function()
   {          
@@ -411,12 +429,8 @@ $rootScope.GotFriend = function(connected, friend)
     $rootScope.notifications = 0;
     $rootScope.user = UserService.getUser();
 
-    //apply translation
-    console.log("in welcome");
-    console.log($rootScope.user.language);
+    //apply translation    
     $translate.use($rootScope.user.language);
-
-    
 
     if(ok)
     {
@@ -608,8 +622,6 @@ $rootScope.GotFriend = function(connected, friend)
 
   $rootScope.user = UserService.getUser();
 
-
-
   $scope.goHome = function()
   {
     $ionicHistory.nextViewOptions(
@@ -629,7 +641,7 @@ $rootScope.GotFriend = function(connected, friend)
   {    
     $rootScope.user.language = $scope.user.language;
 
-    console.log($rootScope.user.language);
+    //console.log($rootScope.user.language);
     
     $translate.use($rootScope.user.language);
     
@@ -705,11 +717,11 @@ $rootScope.GotFriend = function(connected, friend)
 
    $scope.showHomeTab = function(tabId)
   {
-    console.log(tabId);
+    //console.log(tabId);
     if(!$("#"+tabId).is(':visible'))
     {
       $("#home_main").hide();
-      $("#friends").hide();
+      $("#friends").hide();      
             
       $("#btn_home_main").addClass("active");
       $("#btn_friends").addClass("active");
@@ -764,7 +776,7 @@ $rootScope.GotFriend = function(connected, friend)
 
   $scope.goToItem = function(itemId)
   {
-    console.log(itemId);
+    //console.log(itemId);
     window.location = "#/app/item/"+itemId;
     
   }
@@ -864,7 +876,7 @@ $rootScope.GotFriend = function(connected, friend)
 
   $scope.deleteCategory = function(myCategory)
   {
-    console.log(myCategory);
+    //console.log(myCategory);
     $ionicPopup.confirm(
     {
       title: "Delete Category",
@@ -976,8 +988,9 @@ $rootScope.GotFriend = function(connected, friend)
 
 
 //define google functionality
+/*
   if(typeof google != "undefined")
-  {
+  {    
      var input = document.getElementById('itemDataNameHome');
 
      //var autocomplete = new google.maps.places.Autocomplete(input,{types: ['establishment']});
@@ -1123,9 +1136,11 @@ $rootScope.GotFriend = function(connected, friend)
     });    
   }
 
+  */
+
   $scope.removeNotifications = function(friendId)
   {
-    console.log("removeNotifications");
+   // console.log("removeNotifications");
     
     for(var i=0; i< $rootScope.user.friends.length; i++)
     {
@@ -1171,7 +1186,7 @@ $rootScope.GotFriend = function(connected, friend)
 
       if($rootScope.show_friends)
       {
-        console.log($rootScope.show_friends);
+       // console.log($rootScope.show_friends);
         $rootScope.show_friends = false;
         $scope.showHomeTab('friends');        
       }
@@ -1837,7 +1852,7 @@ $scope.editItems = function(ItemAttribute)
          newCategoryId = ($rootScope.user.categories[$rootScope.user.categories.length -1].id + 1) ;
         }
 
-        console.log("newCategoryId: " + newCategoryId);
+      //  console.log("newCategoryId: " + newCategoryId);
 
        var newCategoryName = res;
        if(newCategoryName != "")
@@ -1876,6 +1891,7 @@ $scope.editItems = function(ItemAttribute)
       content: messageText
     }).then(function(res) {
       //console.log('Test Alert Box');
+
     });
   };
 
@@ -2316,7 +2332,7 @@ $scope.shareLocalImage = function(base64Image)
 
 .controller('CategoriesCtrl', function($rootScope, $scope, DbService, UserService, $state, $ionicLoading, $ionicModal, $ionicPopup, $ionicScrollDelegate, $ionicListDelegate){
 
-  console.log("in CategoriesCtrl");
+//  console.log("in CategoriesCtrl");
   $scope.addNewCategory = function()
   {
     //$scope.openModal();
@@ -2408,7 +2424,7 @@ $scope.shareLocalImage = function(base64Image)
 
   $scope.deleteCategory = function(myCategory)
   {
-    console.log(myCategory);
+   // console.log(myCategory);
     $ionicPopup.confirm(
     {
       title: "Delete Category",
@@ -2460,7 +2476,7 @@ $scope.shareLocalImage = function(base64Image)
 
 .controller('FriendsCtrl', function($rootScope, $scope, DbService, UserService, $state, $ionicLoading){
 
-  console.log("in FriendsCtrl");
+ // console.log("in FriendsCtrl");
 
   //console.log($rootScope.user);
 
@@ -2469,7 +2485,7 @@ $scope.shareLocalImage = function(base64Image)
 
 .controller('FriendCtrl', function($rootScope, $scope, $stateParams, $timeout, UserService, $ionicHistory){
 
-  console.log("in Friend");
+ // console.log("in Friend");
 
   $rootScope.currentFriend = null;
 
@@ -2493,7 +2509,7 @@ $scope.shareLocalImage = function(base64Image)
     {
       if($rootScope.currentFriend.categories[i].items[j].is_public == false)
       {
-        console.log($rootScope.currentFriend.categories[i].items[j].is_public);
+ //       console.log($rootScope.currentFriend.categories[i].items[j].is_public);
         private_items_count++;
       }
     }
@@ -2551,7 +2567,7 @@ $scope.showFriends = function()
 
 .controller('FriendsItemCtrl', function($rootScope, $scope, $timeout, UserService, DbService, $state, $stateParams, $ionicLoading, $ionicModal, $ionicSlideBoxDelegate, $ionicHistory, $ionicPopup, $ionicListDelegate, $ionicScrollDelegate, $cordovaCamera, $cordovaFile, ConnectivityMonitor, $cordovaSocialSharing){
 
-  console.log("in FriendsItemCtrl");
+ // console.log("in FriendsItemCtrl");
 
   $scope.newItem = false;
 
@@ -2561,8 +2577,8 @@ $scope.showFriends = function()
   {
     for(var j=0; j< $rootScope.currentFriend.categories[i].items.length; j++)
     {      
-      console.log("making false")
-      console.log("($rootScope.currentFriend.categories["+i+"] " + $rootScope.currentFriend.categories[i].name);
+  //    console.log("making false")
+    //  console.log("($rootScope.currentFriend.categories["+i+"] " + $rootScope.currentFriend.categories[i].name);
 
       $rootScope.currentFriend.categories[i].checked = false;
 
@@ -2571,8 +2587,8 @@ $scope.showFriends = function()
         $scope.Item = $rootScope.currentFriend.categories[i].items[j];
         $rootScope.currentFriend.categories[i].checked = true;
 
-       console.log("making true")
-       console.log("($rootScope.currentFriend.categories["+i+"] " + $rootScope.currentFriend.categories[i].name);
+      // console.log("making true")
+       //console.log("($rootScope.currentFriend.categories["+i+"] " + $rootScope.currentFriend.categories[i].name);
         break;
       }      
       
@@ -2580,9 +2596,9 @@ $scope.showFriends = function()
     
   }
 
-  console.log($rootScope.currentFriend.categories);    
+  //console.log($rootScope.currentFriend.categories);    
   $scope.Item.style = "red";
-  console.log($scope.Item);
+  //console.log($scope.Item);
 
 
 //$("#my-item").css('background-image', 'url(' + $scope.Item.default_image.image_name + ')');
